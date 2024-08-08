@@ -1,9 +1,9 @@
-package com.example.currencyinsight
+package com.alicasts.currencyinsight
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-
 import com.example.currencyinsight.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
 
