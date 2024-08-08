@@ -1,4 +1,4 @@
-package com.example.currencyinsight
+package com.alicasts.currencyinsight
 
 import org.junit.Test
 
