@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight
+package com.alicasts.currencyinsight.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
