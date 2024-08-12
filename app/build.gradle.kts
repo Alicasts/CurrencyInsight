@@ -33,6 +33,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -53,8 +58,15 @@ dependencies {
     implementation(libs.converter.gson)
     implementation (libs.gson)
     implementation(libs.hilt.android)
+    implementation(libs.androidx.room.compiler)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter)
+    androidTestImplementation(libs.mockk.agent)
     kapt(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.mockk)
 }
