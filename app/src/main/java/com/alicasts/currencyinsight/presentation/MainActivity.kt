@@ -3,8 +3,9 @@ package com.alicasts.currencyinsight.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.currencyinsight.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {
