@@ -1,5 +1,6 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,7 @@ class CurrencyPairListViewModel @Inject constructor(
         getCurrencyPairList()
     }
 
-    private fun getCurrencyPairList() {
+    fun getCurrencyPairList() {
         viewModelScope.launch {
             getCurrencyPairListUseCase().onEach { result ->
                 when (result) {
