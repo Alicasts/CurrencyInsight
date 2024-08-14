@@ -4,7 +4,6 @@ import com.alicasts.currencyinsight.common.parseCurrencyPairListResponse
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 import com.alicasts.currencyinsight.data.remote.CoinAwesomeApi
 import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
-import com.google.gson.JsonObject
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

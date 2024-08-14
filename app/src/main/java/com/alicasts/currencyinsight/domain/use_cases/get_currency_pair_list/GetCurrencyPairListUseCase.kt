@@ -12,8 +12,9 @@ import javax.inject.Inject
 
 class GetCurrencyPairListUseCase @Inject constructor(
     private val repository: CurrencyPairRepository,
-    private val mapper: CurrencyPairMapper
+
 ) {
+    private val mapper = CurrencyPairMapper()
     operator fun invoke(): Flow<Resource<List<CurrencyPairListItemModel>>> = flow {
         try {
             emit(Resource.Loading())
@@ -26,5 +27,4 @@ class GetCurrencyPairListUseCase @Inject constructor(
             emit(Resource.Error(e.localizedMessage ?: "Couldn't reach server."))
         }
     }
-
 }

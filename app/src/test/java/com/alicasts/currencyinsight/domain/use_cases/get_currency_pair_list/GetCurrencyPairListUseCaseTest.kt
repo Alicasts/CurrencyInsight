@@ -28,7 +28,7 @@ class GetCurrencyPairListUseCaseTest {
 
     private val repository = mockk<CurrencyPairRepository>()
     private val mapper = mockk<CurrencyPairMapper>()
-    private val useCase = GetCurrencyPairListUseCase(repository, mapper)
+    private val useCase = GetCurrencyPairListUseCase(repository)
 
     @Before
     fun setUp() {

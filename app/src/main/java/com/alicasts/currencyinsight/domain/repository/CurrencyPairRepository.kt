@@ -6,5 +6,4 @@ import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 interface CurrencyPairRepository {
 
     suspend fun getCurrencyPairList(): List<CurrencyPairListItemDto>
-
 }

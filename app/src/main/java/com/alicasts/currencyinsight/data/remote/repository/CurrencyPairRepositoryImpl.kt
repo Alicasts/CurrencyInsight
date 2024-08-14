@@ -13,5 +13,4 @@ class CurrencyPairRepositoryImpl @Inject constructor(
         val response = api.getCurrencyPairList()
         return parseCurrencyPairListResponse(response)
     }
-
 }

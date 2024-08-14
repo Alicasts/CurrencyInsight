@@ -12,5 +12,4 @@ data class CurrencyPairListItemDto(
             currencyPairFullNames = currencyPairFullNames
         )
     }
-
 }
