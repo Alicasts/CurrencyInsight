@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.currencyinsight"
+    namespace = "com.alicasts.currencyinsight"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.currencyinsight"
+        applicationId = "com.alicasts.currencyinsight"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -43,6 +43,11 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    testOptions {
+        packaging {
+            resources.excludes.add("META-INF/*")
+        }
     }
 }
 

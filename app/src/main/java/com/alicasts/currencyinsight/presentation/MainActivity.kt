@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alicasts.currencyinsight.presentation.currency_pair_list.CurrencyPairListActivity
-import com.example.currencyinsight.databinding.ActivityMainBinding
+import com.alicasts.currencyinsight.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

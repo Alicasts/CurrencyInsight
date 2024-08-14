@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
-import com.example.currencyinsight.databinding.ActivityCurrencyPairListBinding
+import com.alicasts.currencyinsight.databinding.ActivityCurrencyPairListBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

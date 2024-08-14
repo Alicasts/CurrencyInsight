@@ -1,41 +1,39 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
-import com.example.currencyinsight.R
+import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
 
 class CurrencyPairListAdapter(
     private val currencyPairList: List<CurrencyPairListItemModel>
 ) : RecyclerView.Adapter<CurrencyPairListAdapter.CurrencyPairViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyPairViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_currency_pair, parent, false)
-
-        return CurrencyPairViewHolder(itemView)
+        val binding = ItemCurrencyPairBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return CurrencyPairViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CurrencyPairViewHolder, position: Int) {
-        val currentItem = currencyPairList[position]
-
-        holder.currencyPairAbbreviationsTextView.text =
-            currentItem.currencyPairAbbreviations
-
-        holder.currencyPairFullNamesTextView.text =
-            currentItem.currencyPairFullNames
+        holder.bind(currencyPairList[position])
     }
 
-    override fun getItemCount() = currencyPairList.size
+    override fun getItemCount(): Int = currencyPairList.size
 
-    class CurrencyPairViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val currencyPairAbbreviationsTextView: TextView =
-            itemView.findViewById(R.id.currencyPairAbbreviationsTextView)
+    inner class CurrencyPairViewHolder(binding: ItemCurrencyPairBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val currencyPairFullNamesTextView: TextView =
-            itemView.findViewById(R.id.currencyPairFullNamesTextView)
+        private val binding by lazy {
+            ItemCurrencyPairBinding.bind(itemView)
+        }
+
+        fun bind(currencyPair: CurrencyPairListItemModel) {
+            binding.currencyPairAbbreviationsTextView.text = currencyPair.currencyPairAbbreviations
+            binding.currencyPairFullNamesTextView.text = currencyPair.currencyPairFullNames
+        }
     }
 }
