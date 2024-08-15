@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.alicasts.currencyinsight.HiltTestRunner"
     }
 
     buildTypes {
@@ -63,7 +63,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.espresso.contrib)
     kapt(libs.hilt.android.compiler)
+    kaptAndroidTest(libs.hilt.android.compiler)
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
@@ -73,4 +75,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.hilt.android.testing)
 }

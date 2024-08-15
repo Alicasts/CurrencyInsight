@@ -7,14 +7,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.presentation.MainActivity
 import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@HiltAndroidTest
 class CurrencyPairAdapterTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     private lateinit var scenario: ActivityScenario<CurrencyPairListActivity>
     private lateinit var adapter: CurrencyPairListAdapter
@@ -22,6 +29,8 @@ class CurrencyPairAdapterTest {
 
     @Before
     fun setUp() {
+        hiltRule.inject()
+
         scenario = ActivityScenario.launch(CurrencyPairListActivity::class.java)
         currencyPairs = listOf(
             CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"),
@@ -62,5 +71,5 @@ class CurrencyPairAdapterTest {
                 assertEquals("US Dollar/Euro", itemBinding.currencyPairFullNamesTextView.text)
             }
         }
-        }
+    }
 }

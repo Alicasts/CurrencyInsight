@@ -25,7 +25,6 @@ class CurrencyPairListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView( binding.root )
 
-
         setupRecyclerView()
 
         observeViewModel()
@@ -43,7 +42,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleState(state: CurrencyPairListState) {
+    fun handleState(state: CurrencyPairListState) {
         when {
             state.isLoading -> {
                 setViewVisibility(displayProgressBar = true)
