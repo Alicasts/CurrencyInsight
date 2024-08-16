@@ -27,7 +27,7 @@ class CurrencyPairListAdapter(
 
     inner class CurrencyPairViewHolder(binding: ItemCurrencyPairBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val binding by lazy {
+        private val binding by lazy {
             ItemCurrencyPairBinding.bind(itemView)
         }
 
