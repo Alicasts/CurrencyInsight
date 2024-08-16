@@ -1,6 +1,5 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +22,8 @@ class CurrencyPairListViewModel @Inject constructor(
     private val _state = MutableLiveData<CurrencyPairListState>()
     val state: LiveData<CurrencyPairListState> = _state
 
+    private var currentList = emptyList<CurrencyPairListItemModel>()
+
     init {
         getCurrencyPairList()
     }
@@ -31,8 +33,10 @@ class CurrencyPairListViewModel @Inject constructor(
             getCurrencyPairListUseCase().onEach { result ->
                 when (result) {
                     is Resource.Success -> {
+                        currentList = result.data ?: emptyList()
                         _state.postValue(CurrencyPairListState(
-                            currencyPairList = result.data ?: emptyList()))
+                            currencyPairList = currentList)
+                        )
                     }
                     is Resource.Error -> {
                         _state.postValue(CurrencyPairListState(
@@ -44,5 +48,23 @@ class CurrencyPairListViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun filterCurrencyPairList(query: String) {
+        val normalizedQuery = normalizeString(query)
+        val filteredList = if (normalizedQuery.isEmpty()) {
+            currentList
+        } else {
+            currentList.filter {
+                normalizeString(it.currencyPairAbbreviations).contains(normalizedQuery, ignoreCase = true) ||
+                        normalizeString(it.currencyPairFullNames).contains(normalizedQuery, ignoreCase = true)
+            }
+        }
+        _state.postValue(CurrencyPairListState(currencyPairList = filteredList))
+    }
+
+    private fun normalizeString(input: String): String {
+        return Normalizer.normalize(input, Normalizer.Form.NFD)
+            .replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
     }
 }

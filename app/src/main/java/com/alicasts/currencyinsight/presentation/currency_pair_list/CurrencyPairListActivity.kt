@@ -2,6 +2,7 @@ package com.alicasts.currencyinsight.presentation.currency_pair_list
 
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -25,9 +26,39 @@ class CurrencyPairListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView( binding.root )
 
+        setupSearchView()
         setupRecyclerView()
-
         observeViewModel()
+    }
+
+    private fun setupSearchView() {
+        val searchView = binding.searchView
+
+        searchView.setOnClickListener {
+            if (searchView.isIconified) {
+                searchView.isIconified = false
+            }
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    currencyPairListViewModel.filterCurrencyPairList(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                query?.let {
+                    if (it.length >= 3) {
+                        currencyPairListViewModel.filterCurrencyPairList(it)
+                    } else if (it.isEmpty()) {
+                        currencyPairListViewModel.filterCurrencyPairList("")
+                    }
+                }
+                return true
+            }
+        })
     }
 
     private fun setupRecyclerView() {
