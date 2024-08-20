@@ -44,11 +44,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    testOptions {
-        packaging {
-            resources.excludes.add("META-INF/*")
-        }
-    }
 }
 
 dependencies {
@@ -74,7 +69,6 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.androidx.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
