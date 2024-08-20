@@ -12,102 +12,105 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
-import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
-import io.mockk.clearMocks
+import com.alicasts.currencyinsight.common.Resource
+import io.mockk.verify
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import java.io.IOException
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
+import org.junit.rules.TestRule
+import org.junit.runner.RunWith
+import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
+@RunWith(MockitoJUnitRunner::class)
 class CurrencyPairListViewModelTest {
 
     @get:Rule
-    var rule = InstantTaskExecutorRule()
+    var instantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: CurrencyPairListViewModel
-    private var getCurrencyPairListUseCase: GetCurrencyPairListUseCase = mockk()
-    private var repository: CurrencyPairRepository = mockk(relaxed = true)
+    private lateinit var getCurrencyPairListUseCase: GetCurrencyPairListUseCase
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    private val testDispatcher = UnconfinedTestDispatcher()
+
     @Before
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        clearMocks(getCurrencyPairListUseCase, repository)
-        getCurrencyPairListUseCase = GetCurrencyPairListUseCase(repository)
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+        getCurrencyPairListUseCase = mockk(relaxed = true)
         viewModel = CurrencyPairListViewModel(getCurrencyPairListUseCase)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
     @Test
-    fun `test error is handled correctly`() = runTest {
-        val errorMessage = "Couldn't reach server."
-        coEvery { repository.getCurrencyPairList() } throws IOException(errorMessage)
+    fun `should load data successfully and update state`() = runTest {
+        val mockCurrencyPairs = listOf(
+            CurrencyPairListItemModel("USD-BRL", "Dólar Americano/Real Brasileiro"),
+            CurrencyPairListItemModel("EUR-BRL", "Euro/Real Brasileiro")
+        )
+        coEvery { getCurrencyPairListUseCase() } returns flow {
+            emit(Resource.Success(mockCurrencyPairs))
+        }
+
+        val observer = mockk<Observer<CurrencyPairListState>>(relaxed = true)
+        viewModel.state.observeForever(observer)
 
         viewModel.getCurrencyPairList()
 
-        val state = viewModel.state.getOrAwaitValue()
-        assertEquals(errorMessage, state.error)
-        assertEquals(false, state.isLoading)
+        verify {
+            observer.onChanged(CurrencyPairListState(currencyPairList = mockCurrencyPairs))
+        }
+    }
+    @Test
+    fun `should emit error state when data loading fails`() = runTest {
+        val errorMessage = "An unexpected error occurred."
+        coEvery { getCurrencyPairListUseCase() } returns flow {
+            emit(Resource.Error(errorMessage))
+        }
+
+        val observer = mockk<Observer<CurrencyPairListState>>(relaxed = true)
+        viewModel.state.observeForever(observer)
+
+        viewModel.getCurrencyPairList()
+
+        verify {
+            observer.onChanged(CurrencyPairListState(error = errorMessage))
+        }
     }
 
     @Test
-    fun `test currency pair list loaded successfully`() = runTest {
-        val currencyPairs = listOf(
-            CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"),
-            CurrencyPairListItemModel("GBP/USD", "British Pound/US Dollar")
+    fun `should filter currency pair list based on query`() = runTest {
+        // Lista simulada de pares de moedas
+        val mockCurrencyPairs = listOf(
+            CurrencyPairListItemModel("USD-BRL", "Dólar Americano/Real Brasileiro"),
+            CurrencyPairListItemModel("EUR-BRL", "Euro/Real Brasileiro")
         )
-        coEvery { repository.getCurrencyPairList() } coAnswers {
-            listOf(
-                CurrencyPairListItemDto("USD/EUR", "US Dollar/Euro"),
-                CurrencyPairListItemDto("GBP/USD", "British Pound/US Dollar")
-            )
+
+        // Configurando o mock para retornar os dados simulados
+        coEvery { getCurrencyPairListUseCase() } returns flow {
+            emit(Resource.Success(mockCurrencyPairs))
         }
 
+        val observer = mockk<Observer<CurrencyPairListState>>(relaxed = true)
+        viewModel.state.observeForever(observer)
+
+        // Simulando a carga inicial dos dados
         viewModel.getCurrencyPairList()
 
-        val state = viewModel.state.getOrAwaitValue()
-        assertEquals(currencyPairs, state.currencyPairList)
-        assertEquals(false, state.isLoading)
-    }
+        // Aplicando o filtro
+        viewModel.filterCurrencyPairList("usd")
 
-    fun <T> LiveData<T>.getOrAwaitValue(
-        time: Long = 2,
-        timeUnit: TimeUnit = TimeUnit.SECONDS,
-        afterObserve: () -> Unit = {}
-    ): T {
-        var data: T? = null
-        val latch = CountDownLatch(1)
-        val observer = object : Observer<T> {
-            override fun onChanged(value: T) {
-                data = value
-                latch.countDown()
-                this@getOrAwaitValue.removeObserver(this)
-            }
-        }
-        this.observeForever(observer)
-
-        try {
-            afterObserve.invoke()
-
-            if (!latch.await(time, timeUnit)) {
-                throw RuntimeException("LiveData value was never set.")
-            }
-        } finally {
-            this.removeObserver(observer)
+        // Verificando se o estado foi atualizado corretamente após a filtragem
+        verify {
+            observer.onChanged(CurrencyPairListState(currencyPairList = listOf(mockCurrencyPairs[0])))
         }
 
-        @Suppress("UNCHECKED_CAST")
-        return data as T
+        // Removendo o observer após o teste para evitar vazamentos de memória
+        viewModel.state.removeObserver(observer)
     }
 }

@@ -13,27 +13,24 @@ import javax.inject.Inject
 
 class GetCurrencyPairListUseCase @Inject constructor(
     private val repository: CurrencyPairRepository,
+    private val mapper: CurrencyPairMapper
 ) {
-    private val mapper = CurrencyPairMapper()
-    private lateinit var currencyPairList: List<CurrencyPairListItemModel>
 
     operator fun invoke(): Flow<Resource<List<CurrencyPairListItemModel>>> = flow {
         try {
             emit(Resource.Loading())
+            val currencyPairList: List<CurrencyPairListItemModel>
 
             if (shouldFetchNewData()) {
-                val currencyPairListDto = returnCurrencyListDto()
+                val currencyPairListDto = repository.getCurrencyPairList()
                 persistUpdatedList(currencyPairListDto)
-
-                currencyPairList  = mapper.fromDtoToModelList(currencyPairListDto)
-                emit(Resource.Success(currencyPairList))
+                currencyPairList = mapper.fromDtoToModelList(currencyPairListDto)
             } else {
-                currencyPairList =
-                    mapper.fromEntityToModelList(
+                currencyPairList = mapper.fromEntityToModelList(
                     repository.getCurrencyPairsFromDatabase()
                 )
-                emit(Resource.Success(currencyPairList))
             }
+            emit(Resource.Success(currencyPairList))
         } catch (e: HttpException) {
             emit(Resource.Error(e.localizedMessage ?: "An unexpected error occurred."))
         } catch (e: IOException) {
@@ -44,11 +41,6 @@ class GetCurrencyPairListUseCase @Inject constructor(
     private suspend fun persistUpdatedList(currencyPairListDto: List<CurrencyPairListItemDto>) {
         repository.updateLastFetchDate()
         repository.saveCurrencyPairsToDatabase(currencyPairListDto)
-    }
-
-    private suspend fun returnCurrencyListDto(): List<CurrencyPairListItemDto> {
-        val currencyPairListDto = repository.getCurrencyPairList()
-        return currencyPairListDto
     }
 
     private suspend fun shouldFetchNewData(): Boolean {

@@ -20,7 +20,6 @@ converterGson = "2.9.0"
 hiltAndroid = "2.49"
 hiltAndroidCompiler = "2.49"
 roomCompiler = "2.6.1"
-junitJupiter = "5.8.2"
 espressoContrib = "3.6.1"
 
 [libraries]
@@ -45,7 +44,6 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 androidx-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoContrib" }
 
 [plugins]

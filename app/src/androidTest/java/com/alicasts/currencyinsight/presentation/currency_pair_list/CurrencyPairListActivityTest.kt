@@ -1,12 +1,8 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
-import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -76,7 +72,6 @@ class CurrencyPairListActivityTest {
                 activity.handleState(CurrencyPairListState(currencyPairList = currencyPairs))
             }
         }
-
 
         onView(withId(R.id.currencyPairsListRecyclerView))
             .check(matches(isDisplayed()))
