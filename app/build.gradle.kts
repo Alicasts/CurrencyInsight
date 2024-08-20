@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation (libs.androidx.room.runtime)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -65,12 +66,14 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.espresso.contrib)
     kapt(libs.hilt.android.compiler)
+    //noinspection KaptUsageInsteadOfKsp
+    kapt(libs.androidx.room.compiler)
+    implementation (libs.androidx.room.ktx)
     kaptAndroidTest(libs.hilt.android.compiler)
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.androidx.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

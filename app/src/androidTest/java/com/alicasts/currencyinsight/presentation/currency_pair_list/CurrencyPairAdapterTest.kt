@@ -1,11 +1,9 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
-import com.alicasts.currencyinsight.presentation.MainActivity
 import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

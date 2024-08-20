@@ -1,47 +1,60 @@
 package com.alicasts.currencyinsight.data.mappers
 
+import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
+import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
+import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData.getJsonResponseAsString
+import junit.framework.TestCase.assertEquals
+import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
 
 class CurrencyPairMapperTest {
 
-    private val mapper = CurrencyPairMapper()
+    private lateinit var mapper: CurrencyPairMapper
+    private lateinit var response: String
 
-
-    @Test
-    fun `test valid DTO to model mapping`() {
-        val dto = CurrencyPairListItemDto("USD/EUR", "US Dollar/Euro")
-        val model = mapper.fromDtoToModelList(listOf(dto)).first()
-
-        assertEquals("USD/EUR", model.currencyPairAbbreviations)
-        assertEquals("US Dollar/Euro", model.currencyPairFullNames)
+    @Before
+    fun setup() {
+        mapper = CurrencyPairMapper()
+        response = getJsonResponseAsString()
     }
 
     @Test
-    fun `test mapping with multiple valid items`() {
-        val dtoList = listOf(
-            CurrencyPairListItemDto("USD/EUR", "US Dollar/Euro"),
-            CurrencyPairListItemDto("GBP/USD", "British Pound/US Dollar"),
-            CurrencyPairListItemDto("JPY/CHF", "Japanese Yen/Swiss Franc")
-        )
+    fun `fromDtoToModelList should correctly map DTO to Model`() {
+        val dtoList = CurrencyPairTestMockData.parseCurrencyPairListResponse(response)
         val modelList = mapper.fromDtoToModelList(dtoList)
 
-        assertEquals(3, modelList.size)
-        assertEquals("USD/EUR", modelList[0].currencyPairAbbreviations)
-        assertEquals("US Dollar/Euro", modelList[0].currencyPairFullNames)
-
-        assertEquals("GBP/USD", modelList[1].currencyPairAbbreviations)
-        assertEquals("British Pound/US Dollar", modelList[1].currencyPairFullNames)
-
-        assertEquals("JPY/CHF", modelList[2].currencyPairAbbreviations)
-        assertEquals("Japanese Yen/Swiss Franc", modelList[2].currencyPairFullNames)
+        modelList.forEachIndexed { index, model ->
+            assertEquals(dtoList[index].currencyPairAbbreviations, model.currencyPairAbbreviations)
+            assertEquals(dtoList[index].currencyPairFullNames, model.currencyPairFullNames)
+        }
     }
 
     @Test
-    fun `test empty list`() {
-        val result = mapper.fromDtoToModelList(emptyList())
-        assertTrue(result.isEmpty())
+    fun `fromEntityToModelList should correctly map Entity to Model`() {
+        val entityList = dtoListToEntityList(CurrencyPairTestMockData.parseCurrencyPairListResponse(
+            getJsonResponseAsString()
+        ))
+        val modelList = mapper.fromEntityToModelList(entityList)
+
+        modelList.forEachIndexed { index, model ->
+            assertEquals(entityList[index].id, model.currencyPairAbbreviations)
+            assertEquals(entityList[index].currencyPairAbbreviations, model.currencyPairAbbreviations)
+            assertEquals(entityList[index].currencyPairFullNames, model.currencyPairFullNames)
+        }
+    }
+
+    @Test
+    fun `fromDtoToEntityList should correctly map DTO to Entity`() {
+        val dtoList = CurrencyPairTestMockData.parseCurrencyPairListResponse(
+            getJsonResponseAsString()
+        )
+        val entityList = mapper.fromDtoToEntityList(dtoList)
+
+        entityList.forEachIndexed { index, entity ->
+            assertEquals(dtoList[index].currencyPairAbbreviations, entity.currencyPairAbbreviations)
+            assertEquals(dtoList[index].currencyPairFullNames, entity.currencyPairFullNames)
+        }
     }
 
     @Test
@@ -60,5 +73,15 @@ class CurrencyPairMapperTest {
 
         assertEquals("usd/eur", model.currencyPairAbbreviations)
         assertEquals("us dollar/euro", model.currencyPairFullNames)
+    }
+
+    private fun dtoListToEntityList(dtoList: List<CurrencyPairListItemDto>): List<CurrencyPairEntity> {
+        return dtoList.map { dto ->
+            CurrencyPairEntity(
+                id = dto.currencyPairAbbreviations,
+                currencyPairAbbreviations = dto.currencyPairAbbreviations,
+                currencyPairFullNames = dto.currencyPairFullNames
+            )
+        }
     }
 }

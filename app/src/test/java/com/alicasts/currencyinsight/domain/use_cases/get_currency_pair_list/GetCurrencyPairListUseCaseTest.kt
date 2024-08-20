@@ -1,69 +1,139 @@
 package com.alicasts.currencyinsight.domain.use_cases.get_currency_pair_list
 
 import com.alicasts.currencyinsight.common.Resource
-import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
+import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
 import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
 import io.mockk.coEvery
-import io.mockk.every
+import io.mockk.coVerify
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.ResponseBody
 import okhttp3.ResponseBody.Companion.toResponseBody
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class GetCurrencyPairListUseCaseTest {
 
-    private val repository = mockk<CurrencyPairRepository>()
-    private val mapper = mockk<CurrencyPairMapper>()
-    private val useCase = GetCurrencyPairListUseCase(repository)
+    private lateinit var useCase: GetCurrencyPairListUseCase
+    private lateinit var repository: CurrencyPairRepository
+    private lateinit var mapper: CurrencyPairMapper
 
     @Before
-    fun setUp() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
+    fun setup() {
+        repository = mockk()
+        mapper = CurrencyPairMapper()
+        useCase = GetCurrencyPairListUseCase(repository, mapper)
     }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
-
     @Test
-    fun `test successful data fetching`() = runTest {
-        val dtoList = listOf(CurrencyPairListItemDto("USD/EUR", "US Dollar/Euro"))
-        val modelList = listOf(CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"))
+    fun `should fetch new data when necessary and return Success`() = runBlocking {
+        val dtoList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString())
+        val modelList = mapper.fromDtoToModelList(dtoList)
 
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
         coEvery { repository.getCurrencyPairList() } returns dtoList
-        every { mapper.fromDtoToModelList(dtoList) } returns modelList
+        coEvery { repository.saveCurrencyPairsToDatabase(dtoList) } returns Unit
+        coEvery { repository.updateLastFetchDate() } returns Unit
+        val emissions = useCase.invoke().toList()
 
-        val result = useCase().toList()
-
-        assertEquals(2, result.size)
-        assertTrue(result[0] is Resource.Loading)
-        assertTrue(result[1] is Resource.Success && result[1].data == modelList)
+        assertTrue(emissions[0] is Resource.Loading)
+        assertTrue(emissions[1] is Resource.Success)
+        assertEquals(modelList, (emissions[1] as Resource.Success).data)
+        coVerify { repository.getCurrencyPairList() }
+        coVerify { repository.saveCurrencyPairsToDatabase(dtoList) }
+        coVerify { repository.updateLastFetchDate() }
     }
 
     @Test
-    fun `test HTTP error handling`() = runTest {
-        coEvery { repository.getCurrencyPairList() } throws HttpException(Response.error<Any>(404, "".toResponseBody()))
+    fun `should return data from database and skip API call when last fetch is recent`() = runBlocking {
+        val entityList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString()).map { dto ->
+            CurrencyPairEntity(
+                id = dto.currencyPairAbbreviations,
+                currencyPairAbbreviations = dto.currencyPairAbbreviations,
+                currencyPairFullNames = dto.currencyPairFullNames
+            )
+        }
+        val modelList = mapper.fromEntityToModelList(entityList)
 
-        val result = useCase().toList()
-        println(result[1].message)
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
+        coEvery { repository.getCurrencyPairsFromDatabase() } returns entityList
 
-        assertEquals(2, result.size)
-        assertTrue(result[0] is Resource.Loading)
-        assertTrue(result[1] is Resource.Error)
+        val emissions = useCase.invoke().toList()
+
+        assertTrue(emissions[0] is Resource.Loading)
+
+        assertTrue(emissions[1] is Resource.Success)
+        assertEquals(modelList, (emissions[1] as Resource.Success).data)
+
+        coVerify(exactly = 0) { repository.getCurrencyPairList() }
+        coVerify(exactly = 0) { repository.saveCurrencyPairsToDatabase(any()) }
+    }
+
+    @Test
+    fun `should return data from database when last fetch is recent`() = runBlocking {
+        val entityList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString()).map { dto ->
+            CurrencyPairEntity(
+                id = dto.currencyPairAbbreviations,
+                currencyPairAbbreviations = dto.currencyPairAbbreviations,
+                currencyPairFullNames = dto.currencyPairFullNames
+            )
+        }
+        val modelList = mapper.fromEntityToModelList(entityList)
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
+        coEvery { repository.getCurrencyPairsFromDatabase() } returns entityList
+        val emissions = useCase.invoke().toList()
+
+        assertTrue(emissions[0] is Resource.Loading)
+        assertTrue(emissions[1] is Resource.Success)
+        assertEquals(modelList, (emissions[1] as Resource.Success).data)
+    }
+
+    @Test
+    fun `should not fetch new data from API when last fetch is recent`() = runBlocking {
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
+        coEvery { repository.getCurrencyPairsFromDatabase() } returns emptyList()
+
+        useCase.invoke().toList()
+
+        coVerify(exactly = 0) { repository.getCurrencyPairList() }
+        coVerify(exactly = 0) { repository.saveCurrencyPairsToDatabase(any()) }
+    }
+
+    @Test
+    fun `should emit Error when HttpException is thrown`() = runBlocking {
+        val errorResponse = Response.error<ResponseBody>(
+            500,
+            "Internal Server Error".toResponseBody("application/json".toMediaTypeOrNull())
+        )
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
+        coEvery { repository.getCurrencyPairList() } throws HttpException(errorResponse)
+
+        val emissions = useCase.invoke().toList()
+
+        assertTrue(emissions[0] is Resource.Loading)
+        assertTrue(emissions[1] is Resource.Error)
+        assertEquals("HTTP 500 Response.error()", (emissions[1] as Resource.Error).message)
+    }
+
+    @Test
+    fun `should emit Error when IOException is thrown`() = runBlocking {
+        coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
+        coEvery { repository.getCurrencyPairList() } throws IOException()
+
+        val emissions = useCase.invoke().toList()
+
+        assertTrue(emissions[0] is Resource.Loading)
+        assertTrue(emissions[1] is Resource.Error)
+        assertEquals("Couldn't reach server.", (emissions[1] as Resource.Error).message)
     }
 }
