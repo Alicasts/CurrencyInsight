@@ -7,6 +7,7 @@ import androidx.room.Room
 import com.alicasts.currencyinsight.common.Constants
 import com.alicasts.currencyinsight.data.database.CurrencyInsightDatabase
 import com.alicasts.currencyinsight.data.database.CurrencyPairDao
+import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.remote.CoinAwesomeApi
 import com.alicasts.currencyinsight.data.remote.repository.CurrencyPairRepositoryImpl
@@ -81,5 +82,11 @@ object AppModule {
     @Singleton
     fun provideCurrencyPairMapper(): CurrencyPairMapper {
         return CurrencyPairMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyComparisonMapper(): CurrencyComparisonMapper {
+        return CurrencyComparisonMapper()
     }
 }

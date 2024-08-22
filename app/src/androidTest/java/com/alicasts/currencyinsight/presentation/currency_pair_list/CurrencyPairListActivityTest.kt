@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alicasts.currencyinsight.R
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.hamcrest.CoreMatchers.not

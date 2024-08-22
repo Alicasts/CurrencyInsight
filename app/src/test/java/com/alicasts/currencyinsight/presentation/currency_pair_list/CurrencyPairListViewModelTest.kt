@@ -2,7 +2,7 @@ package com.alicasts.currencyinsight.presentation.currency_pair_list
 
 import org.junit.Rule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.domain.use_cases.get_currency_pair_list.GetCurrencyPairListUseCase
 import io.mockk.mockk
 import io.mockk.coEvery

@@ -3,7 +3,7 @@ package com.alicasts.currencyinsight.domain.use_cases.get_currency_pair_list
 import com.alicasts.currencyinsight.common.Resource
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

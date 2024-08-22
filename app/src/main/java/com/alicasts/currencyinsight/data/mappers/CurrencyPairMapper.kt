@@ -2,7 +2,9 @@ package com.alicasts.currencyinsight.data.mappers
 
 import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyHistoricalData
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 
 class CurrencyPairMapper {
     fun fromDtoToModelList(items: List<CurrencyPairListItemDto>): List<CurrencyPairListItemModel> {
