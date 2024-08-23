@@ -1,6 +1,6 @@
 package com.alicasts.currencyinsight.data.mappers
 
-import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData.getJsonResponseAsString
@@ -75,9 +75,9 @@ class CurrencyPairMapperTest {
         assertEquals("us dollar/euro", model.currencyPairFullNames)
     }
 
-    private fun dtoListToEntityList(dtoList: List<CurrencyPairListItemDto>): List<CurrencyPairEntity> {
+    private fun dtoListToEntityList(dtoList: List<CurrencyPairListItemDto>): List<CurrencyPairListEntity> {
         return dtoList.map { dto ->
-            CurrencyPairEntity(
+            CurrencyPairListEntity(
                 id = dto.currencyPairAbbreviations,
                 currencyPairAbbreviations = dto.currencyPairAbbreviations,
                 currencyPairFullNames = dto.currencyPairFullNames

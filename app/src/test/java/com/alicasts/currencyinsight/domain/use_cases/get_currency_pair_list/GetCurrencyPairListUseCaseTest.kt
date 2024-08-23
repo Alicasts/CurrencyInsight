@@ -1,7 +1,7 @@
 package com.alicasts.currencyinsight.domain.use_cases.get_currency_pair_list
 
 import com.alicasts.currencyinsight.common.Resource
-import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
 import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
@@ -41,7 +41,7 @@ class GetCurrencyPairListUseCaseTest {
         val modelList = mapper.fromDtoToModelList(dtoList)
 
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
-        coEvery { repository.getCurrencyPairList() } returns dtoList
+        coEvery { repository.getRemoteCurrencyPairList() } returns dtoList
         coEvery { repository.saveCurrencyPairsToDatabase(dtoList) } returns Unit
         coEvery { repository.updateLastFetchDate() } returns Unit
         val emissions = useCase.invoke().toList()
@@ -49,7 +49,7 @@ class GetCurrencyPairListUseCaseTest {
         assertTrue(emissions[0] is Resource.Loading)
         assertTrue(emissions[1] is Resource.Success)
         assertEquals(modelList, (emissions[1] as Resource.Success).data)
-        coVerify { repository.getCurrencyPairList() }
+        coVerify { repository.getRemoteCurrencyPairList() }
         coVerify { repository.saveCurrencyPairsToDatabase(dtoList) }
         coVerify { repository.updateLastFetchDate() }
     }
@@ -57,7 +57,7 @@ class GetCurrencyPairListUseCaseTest {
     @Test
     fun `should return data from database and skip API call when last fetch is recent`() = runBlocking {
         val entityList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString()).map { dto ->
-            CurrencyPairEntity(
+            CurrencyPairListEntity(
                 id = dto.currencyPairAbbreviations,
                 currencyPairAbbreviations = dto.currencyPairAbbreviations,
                 currencyPairFullNames = dto.currencyPairFullNames
@@ -66,7 +66,7 @@ class GetCurrencyPairListUseCaseTest {
         val modelList = mapper.fromEntityToModelList(entityList)
 
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
-        coEvery { repository.getCurrencyPairsFromDatabase() } returns entityList
+        coEvery { repository.getLocalCurrencyPairsList() } returns entityList
 
         val emissions = useCase.invoke().toList()
 
@@ -75,14 +75,14 @@ class GetCurrencyPairListUseCaseTest {
         assertTrue(emissions[1] is Resource.Success)
         assertEquals(modelList, (emissions[1] as Resource.Success).data)
 
-        coVerify(exactly = 0) { repository.getCurrencyPairList() }
+        coVerify(exactly = 0) { repository.getRemoteCurrencyPairList() }
         coVerify(exactly = 0) { repository.saveCurrencyPairsToDatabase(any()) }
     }
 
     @Test
     fun `should return data from database when last fetch is recent`() = runBlocking {
         val entityList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString()).map { dto ->
-            CurrencyPairEntity(
+            CurrencyPairListEntity(
                 id = dto.currencyPairAbbreviations,
                 currencyPairAbbreviations = dto.currencyPairAbbreviations,
                 currencyPairFullNames = dto.currencyPairFullNames
@@ -90,7 +90,7 @@ class GetCurrencyPairListUseCaseTest {
         }
         val modelList = mapper.fromEntityToModelList(entityList)
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
-        coEvery { repository.getCurrencyPairsFromDatabase() } returns entityList
+        coEvery { repository.getLocalCurrencyPairsList() } returns entityList
         val emissions = useCase.invoke().toList()
 
         assertTrue(emissions[0] is Resource.Loading)
@@ -101,11 +101,11 @@ class GetCurrencyPairListUseCaseTest {
     @Test
     fun `should not fetch new data from API when last fetch is recent`() = runBlocking {
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis()
-        coEvery { repository.getCurrencyPairsFromDatabase() } returns emptyList()
+        coEvery { repository.getLocalCurrencyPairsList() } returns emptyList()
 
         useCase.invoke().toList()
 
-        coVerify(exactly = 0) { repository.getCurrencyPairList() }
+        coVerify(exactly = 0) { repository.getRemoteCurrencyPairList() }
         coVerify(exactly = 0) { repository.saveCurrencyPairsToDatabase(any()) }
     }
 
@@ -116,7 +116,7 @@ class GetCurrencyPairListUseCaseTest {
             "Internal Server Error".toResponseBody("application/json".toMediaTypeOrNull())
         )
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
-        coEvery { repository.getCurrencyPairList() } throws HttpException(errorResponse)
+        coEvery { repository.getRemoteCurrencyPairList() } throws HttpException(errorResponse)
 
         val emissions = useCase.invoke().toList()
 
@@ -128,7 +128,7 @@ class GetCurrencyPairListUseCaseTest {
     @Test
     fun `should emit Error when IOException is thrown`() = runBlocking {
         coEvery { repository.getLastFetchDate() } returns System.currentTimeMillis() - (25 * 60 * 60 * 1000)
-        coEvery { repository.getCurrencyPairList() } throws IOException()
+        coEvery { repository.getRemoteCurrencyPairList() } throws IOException()
 
         val emissions = useCase.invoke().toList()
 

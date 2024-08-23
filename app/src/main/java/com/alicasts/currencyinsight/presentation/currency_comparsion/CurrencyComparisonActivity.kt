@@ -41,8 +41,6 @@ class CurrencyComparisonActivity : AppCompatActivity() {
             }
             else -> {
                 setViewsVisibility(displayChartAndDetails = true)
-                Log.d("OIOI", state.comparisonDetails.toString())
-//                updateRecyclerView(state.currencyPairList)
             }
         }
     }
@@ -53,7 +51,6 @@ class CurrencyComparisonActivity : AppCompatActivity() {
         displayErrorText: Boolean = false
     ) {
         binding.progressBar.setVisibility(displayProgressBar)
-//        binding.currencyPairsListRecyclerView.setVisibility(displayCurrencyPairsList)
         binding.errorTextView.setVisibility(displayErrorText)
     }
 

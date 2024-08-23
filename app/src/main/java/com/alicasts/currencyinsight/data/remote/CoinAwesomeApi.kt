@@ -11,7 +11,7 @@ interface CoinAwesomeApi {
     suspend fun getCurrencyPairList(): JsonObject
 
     @GET("json/daily/{currencyPairId}/{num}")
-    suspend fun getCurrencyComparisonDetails(
+    suspend fun getCurrencyComparisonWithDetails(
         @Path("currencyPairId") currencyPairId: String,
         @Path("num") num: Int
     ): JsonArray

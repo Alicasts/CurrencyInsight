@@ -1,31 +1,40 @@
 package com.alicasts.currencyinsight.data.remote.repository
 
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.alicasts.currencyinsight.common.Constants.LAST_FETCH_DATE_KEY
-import com.alicasts.currencyinsight.data.database.CurrencyPairDao
-import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
+import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonDao
+import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonEntity
+import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonWithHistoricalData
+import com.alicasts.currencyinsight.data.database.comparison.CurrencyHistoricalDataEntity
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListDao
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 import com.alicasts.currencyinsight.data.dto.CurrencyHistoricalDataDto
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
+import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.remote.CoinAwesomeApi
 import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyHistoricalData
 import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import javax.inject.Inject
 
 class CurrencyPairRepositoryImpl @Inject constructor(
     private val api: CoinAwesomeApi,
-    private val currencyPairDao: CurrencyPairDao,
+    private val currencyPairListDao: CurrencyPairListDao,
     private val sharedPreferences: SharedPreferences,
-    private val currencyPairMapper: CurrencyPairMapper
+    private val currencyPairMapper: CurrencyPairMapper,
+    private val currencyComparisonDao: CurrencyComparisonDao,
+    private val currencyComparisonMapper: CurrencyComparisonMapper
 ) : CurrencyPairRepository {
 
-    override suspend fun getCurrencyPairList(): List<CurrencyPairListItemDto> {
+    override suspend fun getRemoteCurrencyPairList(): List<CurrencyPairListItemDto> {
         val response = api.getCurrencyPairList()
-        return parseCurrencyPairListResponse(response)
+        return currencyPairMapper.parseCurrencyPairListResponse(response)
     }
 
     override suspend fun updateLastFetchDate() {
@@ -39,55 +48,32 @@ class CurrencyPairRepositoryImpl @Inject constructor(
 
     override suspend fun saveCurrencyPairsToDatabase(currencyPairs: List<CurrencyPairListItemDto>) {
         val entities = currencyPairMapper.fromDtoToEntityList(currencyPairs)
-        currencyPairDao.insertCurrencyPairs(entities)
+        currencyPairListDao.insertCurrencyPairs(entities)
     }
 
-    override suspend fun getCurrencyPairsFromDatabase(): List<CurrencyPairEntity> {
-        return currencyPairDao.getAllCurrencyPairs()
+    override suspend fun getLocalCurrencyPairsList(): List<CurrencyPairListEntity> {
+        return currencyPairListDao.getAllCurrencyPairs()
     }
 
-    override suspend fun getCurrencyComparisonDetails(currencyPairId: String, num: Int): CurrencyComparisonDetailDto {
-        val response = api.getCurrencyComparisonDetails(currencyPairId, num)
-        return parseCurrencyComparisonDetailsResponse(response)
+    override suspend fun getRemoteCurrencyComparisonWithDetails(currencyPairId: String, days: Int): CurrencyComparisonDetailDto {
+        val response = api.getCurrencyComparisonWithDetails(currencyPairId, days)
+        return currencyComparisonMapper.parseCurrencyComparisonDetailsResponse(response)
     }
 
-    private fun parseCurrencyPairListResponse(response: JsonObject): List<CurrencyPairListItemDto> {
-        val currencyPairList = response.entrySet().map { (key, value) ->
-            CurrencyPairListItemDto(key, value.asString)
-        }
-        return currencyPairList
+    override suspend fun getLocalCurrencyComparisonWithDetails(
+        comparisonCode: String, days: Int
+    ): CurrencyComparisonDetails? {
+
+        val localData = currencyComparisonDao.getCurrencyComparisonWithHistoricalData(comparisonCode) ?: return null
+
+        return currencyComparisonMapper.mapToCurrencyComparisonDetails(localData)
     }
 
-    private fun parseCurrencyComparisonDetailsResponse(response: JsonArray): CurrencyComparisonDetailDto {
+    override suspend fun insertCurrencyComparison(comparisonEntity: CurrencyComparisonEntity) {
+        currencyComparisonDao.insertCurrencyComparison(comparisonEntity)
+    }
 
-        val historicalData = response.drop(1).map { element ->
-            val jsonObject = element.asJsonObject
-            CurrencyHistoricalDataDto(
-                high = jsonObject["high"].asString,
-                low = jsonObject["low"].asString,
-                varBid = jsonObject["varBid"].asString,
-                pctChange = jsonObject["pctChange"].asString,
-                bid = jsonObject["bid"].asString,
-                ask = jsonObject["ask"].asString,
-                timestamp = jsonObject["timestamp"].asString
-            )
-        }
-
-        val jsonObject = response[0].asJsonObject
-
-         return CurrencyComparisonDetailDto(
-            code = jsonObject["code"]?.asString ?: "",
-            codein = jsonObject["codein"]?.asString ?: "",
-            name = jsonObject["name"]?.asString ?: "",
-            high = jsonObject["high"].asString,
-            low = jsonObject["low"].asString,
-            varBid = jsonObject["varBid"].asString,
-            pctChange = jsonObject["pctChange"].asString,
-            bid = jsonObject["bid"].asString,
-            ask = jsonObject["ask"].asString,
-            timestamp = jsonObject["timestamp"].asString,
-            createDate = jsonObject["create_date"]?.asString ?: "",
-            historicalData = historicalData
-        )
+    override suspend fun insertHistoricalData(historicalDataEntities: List<CurrencyHistoricalDataEntity>) {
+        currencyComparisonDao.insertHistoricalData(historicalDataEntities)
     }
 }

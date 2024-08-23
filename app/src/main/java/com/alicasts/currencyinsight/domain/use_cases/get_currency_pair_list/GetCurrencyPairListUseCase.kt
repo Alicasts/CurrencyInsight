@@ -22,12 +22,12 @@ class GetCurrencyPairListUseCase @Inject constructor(
             val currencyPairList: List<CurrencyPairListItemModel>
 
             if (shouldFetchNewData()) {
-                val currencyPairListDto = repository.getCurrencyPairList()
+                val currencyPairListDto = repository.getRemoteCurrencyPairList()
                 persistUpdatedList(currencyPairListDto)
                 currencyPairList = mapper.fromDtoToModelList(currencyPairListDto)
             } else {
                 currencyPairList = mapper.fromEntityToModelList(
-                    repository.getCurrencyPairsFromDatabase()
+                    repository.getLocalCurrencyPairsList()
                 )
             }
             emit(Resource.Success(currencyPairList))

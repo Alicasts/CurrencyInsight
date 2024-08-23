@@ -2,11 +2,11 @@ package com.alicasts.currencyinsight.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import androidx.room.Room
 import com.alicasts.currencyinsight.common.Constants
 import com.alicasts.currencyinsight.data.database.CurrencyInsightDatabase
-import com.alicasts.currencyinsight.data.database.CurrencyPairDao
+import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonDao
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListDao
 import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.remote.CoinAwesomeApi
@@ -48,11 +48,13 @@ object AppModule {
     @Singleton
     fun provideCurrencyPairRepository(
         api: CoinAwesomeApi,
-        dao: CurrencyPairDao,
+        dao: CurrencyPairListDao,
         sharedPreferences: SharedPreferences,
-        mapper: CurrencyPairMapper
+        mapper: CurrencyPairMapper,
+        currencyComparisonDao: CurrencyComparisonDao,
+        currencyComparisonMapper: CurrencyComparisonMapper
     ): CurrencyPairRepository {
-        return CurrencyPairRepositoryImpl(api, dao, sharedPreferences, mapper)
+        return CurrencyPairRepositoryImpl(api, dao, sharedPreferences, mapper, currencyComparisonDao, currencyComparisonMapper)
     }
 
     @Provides
@@ -68,8 +70,13 @@ object AppModule {
     }
 
     @Provides
-    fun provideCurrencyPairDao(database: CurrencyInsightDatabase): CurrencyPairDao {
-        return database.currencyPairDao()
+    fun provideCurrencyPairListDao(database: CurrencyInsightDatabase): CurrencyPairListDao {
+        return database.CurrencyPairListDao()
+    }
+
+    @Provides
+    fun provideCurrencyComparisonDao(database: CurrencyInsightDatabase): CurrencyComparisonDao {
+        return database.currencyComparisonDao()
     }
 
     @Provides

@@ -1,8 +1,8 @@
 package com.alicasts.currencyinsight.data.remote.repository
 
 import android.content.SharedPreferences
-import com.alicasts.currencyinsight.data.database.CurrencyPairDao
-import com.alicasts.currencyinsight.data.database.CurrencyPairEntity
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListDao
+import com.alicasts.currencyinsight.data.database.list.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData.getJsonResponse
@@ -22,14 +22,14 @@ class CurrencyPairRepositoryImplTest {
 
     private lateinit var repository: CurrencyPairRepositoryImpl
     private lateinit var api: CoinAwesomeApi
-    private lateinit var dao: CurrencyPairDao
+    private lateinit var dao: CurrencyPairListDao
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var mapper: CurrencyPairMapper
 
     @Before
     fun setup() {
         api = mock(CoinAwesomeApi::class.java)
-        dao = mock(CurrencyPairDao::class.java)
+        dao = mock(CurrencyPairListDao::class.java)
         sharedPreferences = mock(SharedPreferences::class.java)
         mapper = CurrencyPairMapper()
 
@@ -43,7 +43,7 @@ class CurrencyPairRepositoryImplTest {
 
         `when`(api.getCurrencyPairList()).thenReturn(jsonResponse)
 
-        val result = repository.getCurrencyPairList()
+        val result = repository.getRemoteCurrencyPairList()
 
         result.forEachIndexed { index, dto ->
             assertEquals(expectedDtoList[index].currencyPairAbbreviations, dto.currencyPairAbbreviations)
@@ -76,7 +76,7 @@ class CurrencyPairRepositoryImplTest {
     fun `saveCurrencyPairsToDatabase should map and save entities`() = runBlocking {
         val dtoList = CurrencyPairTestMockData.parseCurrencyPairListResponse(CurrencyPairTestMockData.getJsonResponseAsString())
         val entityList = dtoList.map { dto ->
-            CurrencyPairEntity(
+            CurrencyPairListEntity(
                 id = dto.currencyPairAbbreviations,
                 currencyPairAbbreviations = dto.currencyPairAbbreviations,
                 currencyPairFullNames = dto.currencyPairFullNames
@@ -94,7 +94,7 @@ class CurrencyPairRepositoryImplTest {
         val entityList = CurrencyPairTestMockData.parseCurrencyPairListResponse(
             CurrencyPairTestMockData.getJsonResponseAsString())
             .map { dto ->
-            CurrencyPairEntity(
+            CurrencyPairListEntity(
                 id = dto.currencyPairAbbreviations,
                 currencyPairAbbreviations = dto.currencyPairAbbreviations,
                 currencyPairFullNames = dto.currencyPairFullNames
@@ -102,7 +102,7 @@ class CurrencyPairRepositoryImplTest {
         }
         `when`(dao.getAllCurrencyPairs()).thenReturn(entityList)
 
-        val result = repository.getCurrencyPairsFromDatabase()
+        val result = repository.getLocalCurrencyPairsList()
 
         result.forEachIndexed { index, entity ->
             assertEquals(entityList[index].currencyPairAbbreviations, entity.currencyPairAbbreviations)
