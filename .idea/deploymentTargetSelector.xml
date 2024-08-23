@@ -8,7 +8,7 @@
       <SelectionState runConfigName="Tests in 'com'">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="Tests in 'com.alicasts.currencyinsight'">
+      <SelectionState runConfigName="CurrencyPairAdapterTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

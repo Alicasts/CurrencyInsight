@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
-import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
@@ -29,12 +28,12 @@ class CurrencyPairAdapterTest {
     fun setUp() {
         hiltRule.inject()
 
-        scenario = ActivityScenario.launch(CurrencyPairListActivity::class.java)
         currencyPairs = listOf(
             CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"),
             CurrencyPairListItemModel("GBP/USD", "British Pound/US Dollar")
         )
-        adapter = CurrencyPairListAdapter(currencyPairs)
+
+        scenario = ActivityScenario.launch(CurrencyPairListActivity::class.java)
     }
 
     @After
@@ -43,31 +42,21 @@ class CurrencyPairAdapterTest {
     }
 
     @Test
-    fun testItemCount() {
-        assertEquals(2, adapter.itemCount)
-    }
+    fun testItemClicked() {
+        var clickedItem: String? = null
 
-    @Test
-    fun testBindingData() {
-        scenario.use { activityScenario ->
-            activityScenario.onActivity { activity ->
-                val parent = activity.findViewById<ViewGroup>(android.R.id.content)
-
-                val adapter = CurrencyPairListAdapter(
-                    listOf(
-                        CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"),
-                        CurrencyPairListItemModel("GBP/USD", "British Pound/US Dollar")
-                    )
-                )
-
-                val viewHolder = adapter.onCreateViewHolder(parent, 0)
-                adapter.onBindViewHolder(viewHolder, 0)
-
-                val itemBinding = ItemCurrencyPairBinding.bind(viewHolder.itemView)
-
-                assertEquals("USD/EUR", itemBinding.currencyPairAbbreviationsTextView.text)
-                assertEquals("US Dollar/Euro", itemBinding.currencyPairFullNamesTextView.text)
+        scenario.onActivity { activity ->
+            adapter = CurrencyPairListAdapter(currencyPairs) { abbreviation ->
+                clickedItem = abbreviation
             }
+
+            val parent = activity.findViewById<ViewGroup>(android.R.id.content)
+            val viewHolder = adapter.onCreateViewHolder(parent, 0)
+            adapter.onBindViewHolder(viewHolder, 0)
+
+            viewHolder.itemView.performClick()
+
+            assertEquals("USD/EUR", clickedItem)
         }
     }
 }

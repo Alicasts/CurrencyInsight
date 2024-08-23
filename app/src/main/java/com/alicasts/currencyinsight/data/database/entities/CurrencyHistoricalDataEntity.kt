@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight.data.database.comparison
+package com.alicasts.currencyinsight.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

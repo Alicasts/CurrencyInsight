@@ -1,43 +1,31 @@
-package com.alicasts.currencyinsight.data.remote.repository
+package com.alicasts.currencyinsight.data.repository.local
 
 import android.content.SharedPreferences
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.alicasts.currencyinsight.common.Constants.LAST_FETCH_DATE_KEY
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonDao
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonEntity
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonWithHistoricalData
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyHistoricalDataEntity
-import com.alicasts.currencyinsight.data.database.list.CurrencyPairListDao
-import com.alicasts.currencyinsight.data.database.list.CurrencyPairListEntity
+import com.alicasts.currencyinsight.data.database.dao.CurrencyComparisonDao
+import com.alicasts.currencyinsight.data.database.dao.CurrencyPairListDao
+import com.alicasts.currencyinsight.data.database.entities.CurrencyComparisonEntity
+import com.alicasts.currencyinsight.data.database.entities.CurrencyHistoricalDataEntity
+import com.alicasts.currencyinsight.data.database.entities.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 import com.alicasts.currencyinsight.data.dto.CurrencyHistoricalDataDto
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
-import com.alicasts.currencyinsight.data.remote.CoinAwesomeApi
 import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
-import com.alicasts.currencyinsight.domain.repository.CurrencyPairRepository
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
+import com.alicasts.currencyinsight.domain.repository.local.LocalCurrencyPairRepository
 import javax.inject.Inject
 
-class CurrencyPairRepositoryImpl @Inject constructor(
-    private val api: CoinAwesomeApi,
+class LocalCurrencyPairRepositoryImpl @Inject constructor(
     private val currencyPairListDao: CurrencyPairListDao,
     private val sharedPreferences: SharedPreferences,
     private val currencyPairMapper: CurrencyPairMapper,
     private val currencyComparisonDao: CurrencyComparisonDao,
     private val currencyComparisonMapper: CurrencyComparisonMapper
-) : CurrencyPairRepository {
+) : LocalCurrencyPairRepository {
 
-    override suspend fun getRemoteCurrencyPairList(): List<CurrencyPairListItemDto> {
-        val response = api.getCurrencyPairList()
-        return currencyPairMapper.parseCurrencyPairListResponse(response)
-    }
-
-    override suspend fun updateLastFetchDate() {
+    private fun updateLastFetchDate() {
         val currentTime = System.currentTimeMillis()
         sharedPreferences.edit().putLong(LAST_FETCH_DATE_KEY, currentTime).apply()
     }
@@ -46,18 +34,13 @@ class CurrencyPairRepositoryImpl @Inject constructor(
         return sharedPreferences.getLong(LAST_FETCH_DATE_KEY, 0L)
     }
 
-    override suspend fun saveCurrencyPairsToDatabase(currencyPairs: List<CurrencyPairListItemDto>) {
+    private suspend fun saveCurrencyPairsToDatabase(currencyPairs: List<CurrencyPairListItemDto>) {
         val entities = currencyPairMapper.fromDtoToEntityList(currencyPairs)
         currencyPairListDao.insertCurrencyPairs(entities)
     }
 
-    override suspend fun getLocalCurrencyPairsList(): List<CurrencyPairListEntity> {
+    override suspend fun getCurrencyPairsList(): List<CurrencyPairListEntity> {
         return currencyPairListDao.getAllCurrencyPairs()
-    }
-
-    override suspend fun getRemoteCurrencyComparisonWithDetails(currencyPairId: String, days: Int): CurrencyComparisonDetailDto {
-        val response = api.getCurrencyComparisonWithDetails(currencyPairId, days)
-        return currencyComparisonMapper.parseCurrencyComparisonDetailsResponse(response)
     }
 
     override suspend fun getLocalCurrencyComparisonWithDetails(
@@ -75,5 +58,24 @@ class CurrencyPairRepositoryImpl @Inject constructor(
 
     override suspend fun insertHistoricalData(historicalDataEntities: List<CurrencyHistoricalDataEntity>) {
         currencyComparisonDao.insertHistoricalData(historicalDataEntities)
+    }
+
+    override suspend fun getCurrencyPairsModelList(): List<CurrencyPairListItemModel> {
+        val entities = currencyPairListDao.getAllCurrencyPairs()
+        return currencyPairMapper.fromEntityToModelList(entities)
+    }
+
+    override suspend fun persistComparisonDetails(detailDto: CurrencyComparisonDetailDto) {
+        val comparisonEntity = currencyComparisonMapper.mapToEntity(detailDto)
+        val historicalDataDtos: List<CurrencyHistoricalDataDto> = detailDto.historicalData
+        val historicalDataEntities = currencyComparisonMapper.mapToHistoricalEntities(historicalDataDtos, comparisonEntity.comparisonCode)
+
+        insertCurrencyComparison(comparisonEntity)
+        insertHistoricalData(historicalDataEntities)
+    }
+
+    override suspend fun persistUpdatedList(currencyPairListDto: List<CurrencyPairListItemDto>) {
+        updateLastFetchDate()
+        saveCurrencyPairsToDatabase(currencyPairListDto)
     }
 }

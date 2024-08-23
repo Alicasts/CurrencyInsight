@@ -11,10 +11,6 @@ object CurrencyPairTestMockData {
     private val jsonObject = generateResponse()
 
 
-    fun getJsonResponse(): JsonObject {
-        return jsonObject
-    }
-
     fun getJsonResponseAsString(): String {
         return jsonObject.toString()
     }

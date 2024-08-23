@@ -1,10 +1,13 @@
-package com.alicasts.currencyinsight.data.database.comparison
+package com.alicasts.currencyinsight.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.alicasts.currencyinsight.data.database.entities.CurrencyComparisonEntity
+import com.alicasts.currencyinsight.data.database.relations.CurrencyComparisonWithHistoricalData
+import com.alicasts.currencyinsight.data.database.entities.CurrencyHistoricalDataEntity
 
 @Dao
 interface CurrencyComparisonDao {

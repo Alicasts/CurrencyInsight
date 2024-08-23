@@ -1,8 +1,8 @@
 package com.alicasts.currencyinsight.data.mappers
 
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonEntity
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyComparisonWithHistoricalData
-import com.alicasts.currencyinsight.data.database.comparison.CurrencyHistoricalDataEntity
+import com.alicasts.currencyinsight.data.database.entities.CurrencyComparisonEntity
+import com.alicasts.currencyinsight.data.database.relations.CurrencyComparisonWithHistoricalData
+import com.alicasts.currencyinsight.data.database.entities.CurrencyHistoricalDataEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 import com.alicasts.currencyinsight.data.dto.CurrencyHistoricalDataDto
 import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails

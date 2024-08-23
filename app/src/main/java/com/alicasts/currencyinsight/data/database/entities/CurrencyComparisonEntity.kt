@@ -1,8 +1,7 @@
-package com.alicasts.currencyinsight.data.database.comparison
+package com.alicasts.currencyinsight.data.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 
 @Entity(tableName = "currency_comparisons")
 data class CurrencyComparisonEntity(
