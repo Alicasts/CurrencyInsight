@@ -1,7 +1,5 @@
 package com.alicasts.currencyinsight.data.dto
 
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyHistoricalData
-
 data class CurrencyComparisonDetailDto(
     val code: String,
     val codein: String,

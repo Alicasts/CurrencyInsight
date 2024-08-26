@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight.data.remote.repository
+package com.alicasts.currencyinsight.data.repository.local
 
 import android.content.SharedPreferences
 import com.alicasts.currencyinsight.common.Constants
@@ -8,7 +8,6 @@ import com.alicasts.currencyinsight.data.database.entities.CurrencyPairListEntit
 import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
-import com.alicasts.currencyinsight.data.repository.local.LocalCurrencyPairRepositoryImpl
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

@@ -14,7 +14,6 @@ class GetCurrencyPairListUseCase @Inject constructor(
     private val remoteRepository: RemoteCurrencyPairRepository,
     private val localRepository: LocalCurrencyPairRepository
 ) {
-
     operator fun invoke(): Flow<Resource<List<CurrencyPairListItemModel>>> = flow {
         try {
             emit(Resource.Loading())
