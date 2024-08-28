@@ -1,12 +1,13 @@
-package com.alicasts.currencyinsight.presentation.currency_comparsion
+package com.alicasts.currencyinsight.presentation.currency_comparison
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyComparisonBinding
+import com.alicasts.currencyinsight.presentation.currency_comparison.details_fragment.DetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,9 +20,10 @@ class CurrencyComparisonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCurrencyComparisonBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         observeViewModel()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, DetailsFragment())
+            .commit()
     }
 
     private fun observeViewModel() {
@@ -52,6 +54,7 @@ class CurrencyComparisonActivity : AppCompatActivity() {
     ) {
         binding.progressBar.setVisibility(displayProgressBar)
         binding.errorTextView.setVisibility(displayErrorText)
+        binding.fragmentContainer.setVisibility(displayChartAndDetails)
     }
 
     private fun View.setVisibility(isVisible: Boolean) {

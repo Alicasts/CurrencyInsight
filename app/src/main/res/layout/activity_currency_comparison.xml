@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.currency_comparsion.CurrencyComparisonActivity">
+    tools:context=".presentation.currency_comparison.CurrencyComparisonActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -34,21 +34,35 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.compose.ui.platform.ComposeView
-                android:id="@+id/compose_view"
+                android:id="@+id/composeView"
                 android:layout_width="300dp"
                 android:layout_height="260dp"
-                android:layout_marginTop="140dp"
+                android:layout_marginTop="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="280dp"
+                android:layout_marginTop="40dp"
+                android:paddingHorizontal="12dp"
+                app:layout_constraintTop_toBottomOf="@id/composeView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

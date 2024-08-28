@@ -2,8 +2,8 @@ package com.alicasts.currencyinsight.data.mockData
 
 import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 import com.alicasts.currencyinsight.data.dto.CurrencyHistoricalDataDto
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyHistoricalData
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyHistoricalData
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 

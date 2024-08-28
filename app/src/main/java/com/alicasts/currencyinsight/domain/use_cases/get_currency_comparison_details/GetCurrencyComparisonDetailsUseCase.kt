@@ -1,7 +1,7 @@
-package com.alicasts.currencyinsight.domain.use_cases.get_currency_comparsion_details
+package com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details
 
 import com.alicasts.currencyinsight.common.Resource
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
 import com.alicasts.currencyinsight.domain.repository.local.LocalCurrencyPairRepository
 import com.alicasts.currencyinsight.domain.repository.remote.RemoteCurrencyPairRepository
 import kotlinx.coroutines.flow.Flow

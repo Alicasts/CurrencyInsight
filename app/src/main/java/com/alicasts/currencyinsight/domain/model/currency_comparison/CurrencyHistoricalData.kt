@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight.domain.model.currency_comparsion
+package com.alicasts.currencyinsight.domain.model.currency_comparison
 
 data class CurrencyHistoricalData(
     val high: String,

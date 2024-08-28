@@ -1,11 +1,11 @@
-package com.alicasts.currencyinsight.presentation.currency_comparsion
+package com.alicasts.currencyinsight.presentation.currency_comparison
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import com.alicasts.currencyinsight.common.Resource
 import com.alicasts.currencyinsight.data.mockData.CurrencyComparisonWithDetailsTestMockData
-import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparsion_details.GetCurrencyComparisonDetailsUseCase
+import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details.GetCurrencyComparisonDetailsUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify

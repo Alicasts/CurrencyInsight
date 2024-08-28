@@ -12,7 +12,7 @@ import com.alicasts.currencyinsight.data.dto.CurrencyHistoricalDataDto
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
 import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
 import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.domain.repository.local.LocalCurrencyPairRepository
 import javax.inject.Inject

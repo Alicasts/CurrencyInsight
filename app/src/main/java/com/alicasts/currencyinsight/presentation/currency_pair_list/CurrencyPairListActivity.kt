@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyPairListBinding
-import com.alicasts.currencyinsight.presentation.currency_comparsion.CurrencyComparisonActivity
+import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyComparisonActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

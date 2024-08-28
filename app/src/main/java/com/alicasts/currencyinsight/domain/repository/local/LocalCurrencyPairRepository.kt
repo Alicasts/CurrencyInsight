@@ -5,7 +5,7 @@ import com.alicasts.currencyinsight.data.database.entities.CurrencyHistoricalDat
 import com.alicasts.currencyinsight.data.database.entities.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.dto.CurrencyComparisonDetailDto
 import com.alicasts.currencyinsight.data.dto.CurrencyPairListItemDto
-import com.alicasts.currencyinsight.domain.model.currency_comparsion.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
 import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 
 interface LocalCurrencyPairRepository {

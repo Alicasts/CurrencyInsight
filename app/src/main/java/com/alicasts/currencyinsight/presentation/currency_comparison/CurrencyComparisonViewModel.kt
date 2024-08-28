@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight.presentation.currency_comparsion
+package com.alicasts.currencyinsight.presentation.currency_comparison
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alicasts.currencyinsight.common.Resource
-import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparsion_details.GetCurrencyComparisonDetailsUseCase
+import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details.GetCurrencyComparisonDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

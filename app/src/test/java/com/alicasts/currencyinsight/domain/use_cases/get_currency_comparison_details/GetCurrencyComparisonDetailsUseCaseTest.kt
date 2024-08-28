@@ -1,4 +1,4 @@
-package com.alicasts.currencyinsight.domain.use_cases.get_currency_comparsion_details
+package com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details
 
 import com.alicasts.currencyinsight.common.Resource
 import com.alicasts.currencyinsight.data.mockData.CurrencyComparisonWithDetailsTestMockData.returnMockCurrencyComparisonDetails
@@ -10,13 +10,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
