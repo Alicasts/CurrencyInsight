@@ -71,11 +71,16 @@ class LocalCurrencyPairRepositoryImpl @Inject constructor(
         val historicalDataEntities = currencyComparisonMapper.mapToHistoricalEntities(historicalDataDtos, comparisonEntity.comparisonCode)
 
         insertCurrencyComparison(comparisonEntity)
+        clearSelectedHistoricalData(comparisonEntity.comparisonCode)
         insertHistoricalData(historicalDataEntities)
     }
 
     override suspend fun persistUpdatedList(currencyPairListDto: List<CurrencyPairListItemDto>) {
         updateLastFetchDate()
         saveCurrencyPairsToDatabase(currencyPairListDto)
+    }
+
+    override suspend fun clearSelectedHistoricalData(comparisonCode: String) {
+        currencyComparisonDao.deleteHistoricalData(comparisonCode)
     }
 }

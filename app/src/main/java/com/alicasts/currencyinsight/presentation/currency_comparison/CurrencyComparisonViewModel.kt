@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alicasts.currencyinsight.common.CurrencyFormatter
 import com.alicasts.currencyinsight.common.Resource
 import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details.GetCurrencyComparisonDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -49,5 +50,13 @@ class CurrencyComparisonViewModel @Inject constructor(
                 }
             }.launchIn(this)
         }
+    }
+
+    fun calculateBaseCurrencyValue(targetValue: Double, bid: String): String {
+        return CurrencyFormatter.calculateBaseCurrencyValue(targetValue, bid)
+    }
+
+    fun calculateTargetCurrencyValue(baseValue: Double, bid: String): String {
+        return CurrencyFormatter.calculateTargetCurrencyValue(baseValue, bid)
     }
 }

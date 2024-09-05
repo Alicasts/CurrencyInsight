@@ -2,4 +2,6 @@
     <string name="app_name">CurrencyInsight</string>
     <string name="dummy_title">Dummy Currency / Dummy Currency 2</string>
     <string name="dummy_abbreviations">DU1 - DU2</string>
+    <string name="default_target_currency_value">1</string>
+    <string name="currency_name">Currency Name</string>
 </resources>

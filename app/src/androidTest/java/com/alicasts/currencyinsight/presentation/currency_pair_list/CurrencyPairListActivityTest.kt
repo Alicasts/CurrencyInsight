@@ -36,7 +36,7 @@ class CurrencyPairListActivityTest {
 
     @Test
     fun testRecyclerViewIsDisplayed() {
-        onView(withId(R.id.currencyPairsListRecyclerView))
+        onView(withId(R.id.currency_pairs_list_recycler_view))
             .check(matches(isDisplayed()))
     }
 
@@ -50,13 +50,13 @@ class CurrencyPairListActivityTest {
             }
         }
 
-        onView(withId(R.id.errorTextView))
+        onView(withId(R.id.error_text))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
             .check(matches(withText(errorMessage)))
 
-        onView(withId(R.id.progressBar))
+        onView(withId(R.id.progress_bar))
             .check(matches(not(isDisplayed())))
-        onView(withId(R.id.currencyPairsListRecyclerView))
+        onView(withId(R.id.currency_pairs_list_recycler_view))
             .check(matches(not(isDisplayed())))
     }
 
@@ -73,11 +73,11 @@ class CurrencyPairListActivityTest {
             }
         }
 
-        onView(withId(R.id.currencyPairsListRecyclerView))
+        onView(withId(R.id.currency_pairs_list_recycler_view))
             .check(matches(isDisplayed()))
-        onView(withId(R.id.progressBar))
+        onView(withId(R.id.progress_bar))
             .check(matches(not(isDisplayed())))
-        onView(withId(R.id.errorTextView))
+        onView(withId(R.id.error_text))
             .check(matches(not(isDisplayed())))
     }
 

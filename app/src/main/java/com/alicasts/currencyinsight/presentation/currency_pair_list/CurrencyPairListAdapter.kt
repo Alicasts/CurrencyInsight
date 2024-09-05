@@ -50,8 +50,8 @@ class CurrencyPairListAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(currencyPair: CurrencyPairListItemModel) {
-            binding.currencyPairAbbreviationsTextView.text = currencyPair.currencyPairAbbreviations
-            binding.currencyPairFullNamesTextView.text = currencyPair.currencyPairFullNames
+            binding.currencyPairAbbreviationsText.text = currencyPair.currencyPairAbbreviations
+            binding.currencyPairFullNamesText.text = currencyPair.currencyPairFullNames
 
             binding.root.setOnClickListener {
                 onItemClicked(currencyPair.currencyPairAbbreviations)

@@ -17,4 +17,5 @@ interface LocalCurrencyPairRepository {
     suspend fun getCurrencyPairsModelList(): List<CurrencyPairListItemModel>
     suspend fun persistComparisonDetails(detailDto: CurrencyComparisonDetailDto)
     suspend fun persistUpdatedList(currencyPairListDto: List<CurrencyPairListItemDto>)
+    suspend fun clearSelectedHistoricalData(comparisonCode: String)
 }

@@ -86,7 +86,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
             }
             state.error.isNotEmpty() -> {
                 setViewsVisibility(displayErrorText = true)
-                binding.errorTextView.show(state.error)
+                binding.errorText.show(state.error)
             }
             else -> {
                 setViewsVisibility(displayCurrencyPairsList = true)
@@ -102,7 +102,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
     ) {
         binding.progressBar.setVisibility(displayProgressBar)
         binding.currencyPairsListRecyclerView.setVisibility(displayCurrencyPairsList)
-        binding.errorTextView.setVisibility(displayErrorText)
+        binding.errorText.setVisibility(displayErrorText)
     }
 
     private fun View.setVisibility(isVisible: Boolean) {
