@@ -9,6 +9,7 @@ import com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_det
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.verify
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -21,6 +22,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import java.text.DecimalFormat
 
 @ExperimentalCoroutinesApi
 class CurrencyComparisonViewModelTest {
@@ -98,4 +100,27 @@ class CurrencyComparisonViewModelTest {
             observer.onChanged(CurrencyComparisonState(isLoading = true))
         }
     }
+
+    @Test
+    fun `should calculate base currency value correctly`() {
+        val targetValue = 1000.0
+        val bid = "5.4242"
+
+        val result = viewModel.calculateBaseCurrencyValue(targetValue, bid)
+        val expectedValue = "5,424.2"
+
+        assertEquals(expectedValue, result)
+    }
+
+    @Test
+    fun `should calculate target currency value correctly`() {
+        val baseValue = 5000.0
+        val bid = "5.4242"
+
+        val result = viewModel.calculateTargetCurrencyValue(baseValue, bid)
+
+        val expectedValue = "921.794919"
+        assertEquals(expectedValue, result)
+    }
+
 }

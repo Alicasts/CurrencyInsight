@@ -40,7 +40,7 @@ class CurrencyComparisonActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun handleState(state: CurrencyComparisonState) {
+    fun handleState(state: CurrencyComparisonState) {
         when {
             state.isLoading -> {
                 setViewsVisibility(displayProgressBar = true)

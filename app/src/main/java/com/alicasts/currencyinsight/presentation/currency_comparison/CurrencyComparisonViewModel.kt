@@ -25,7 +25,11 @@ class CurrencyComparisonViewModel @Inject constructor(
 
     init {
         val currencyPairId = savedStateHandle.get<String>("currency_pair_id")
-        getCurrencyComparisonDetails(currencyPairId!!)
+        currencyPairId?.let {
+            getCurrencyComparisonDetails(it)
+        } ?: run {
+            _state.postValue(CurrencyComparisonState(error = "Currency Pair ID not found"))
+        }
     }
 
     fun getCurrencyComparisonDetails(currencyPairId: String, num: Int = 15) {

@@ -12,8 +12,8 @@ import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyCom
 
 class DetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentDetailsBinding
-    private val currencyComparisonViewModel: CurrencyComparisonViewModel by activityViewModels()
+    lateinit var binding: FragmentDetailsBinding
+    val currencyComparisonViewModel: CurrencyComparisonViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +64,7 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun generateCard(
+    fun generateCard(
         timestamp: Long,
         pctChange: String,
         bid: String,
