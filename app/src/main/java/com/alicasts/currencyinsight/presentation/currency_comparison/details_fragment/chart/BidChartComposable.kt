@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -86,6 +87,7 @@ fun BidChartComposable(
                 modifier = Modifier
                     .width((chartValues.size * 80.dp * zoomFactor) )
                     .height(300.dp)
+                    .testTag("BidChart")
             ) {
                 drawChart(
                     chartValues = chartValues,

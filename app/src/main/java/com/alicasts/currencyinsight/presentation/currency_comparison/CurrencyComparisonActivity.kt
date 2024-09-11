@@ -130,7 +130,7 @@ class CurrencyComparisonActivity : AppCompatActivity() {
     ) {
         binding.progressBar.setVisibility(displayProgressBar)
         binding.errorText.setVisibility(displayErrorText)
-        binding.cardsFragmentContainer.setVisibility(displayChartAndDetails)
+        binding.detailsContainer.setVisibility(displayChartAndDetails)
     }
 
     private fun View.setVisibility(isVisible: Boolean) {
