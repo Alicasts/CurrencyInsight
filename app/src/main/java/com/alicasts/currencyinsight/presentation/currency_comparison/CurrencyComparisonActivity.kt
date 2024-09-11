@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyComparisonBinding
 import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
 import com.alicasts.currencyinsight.presentation.currency_comparison.details_fragment.DetailsFragment
+import com.alicasts.currencyinsight.presentation.currency_comparison.details_fragment.chart.BidChartComposable
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,6 +54,21 @@ class CurrencyComparisonActivity : AppCompatActivity() {
             else -> {
                 setViewsVisibility(displayChartAndDetails = true)
                 setFieldsValues(state.comparisonDetails)
+                setupChart(state.comparisonDetails)
+            }
+        }
+    }
+
+    private fun setupChart(comparisonDetails: CurrencyComparisonDetails?) {
+        val composeView = binding.composeView
+        composeView.apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
+            setContent {
+                if (comparisonDetails != null) {
+                    BidChartComposable(currencyComparisonDetails = comparisonDetails)
+                }
             }
         }
     }
