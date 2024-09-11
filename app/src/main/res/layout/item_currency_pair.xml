@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/currencyPairFullNamesTextView"
+        android:id="@+id/currency_pair_full_names_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dummy_title"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/currencyPairAbbreviationsTextView"
+        android:id="@+id/currency_pair_abbreviations_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dummy_abbreviations"

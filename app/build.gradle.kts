@@ -48,6 +48,13 @@ android {
         packaging {
             resources.excludes.add("META-INF/*")
         }
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+    buildFeatures.compose = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.2"
     }
 }
 
@@ -65,10 +72,21 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.espresso.contrib)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.mpandroidchart)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    debugImplementation(libs.androidx.ui.tooling)
     kapt(libs.hilt.android.compiler)
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
-    implementation (libs.androidx.room.ktx)
     kaptAndroidTest(libs.hilt.android.compiler)
     annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -79,4 +97,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.hilt.android.testing)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 }

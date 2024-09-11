@@ -1,5 +1,6 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -7,8 +8,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alicasts.currencyinsight.domain.model.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyPairListBinding
+import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyComparisonActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,7 +63,12 @@ class CurrencyPairListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = CurrencyPairListAdapter(emptyList())
+        adapter = CurrencyPairListAdapter(emptyList()) { currencyPairId ->
+            val intent = Intent(this, CurrencyComparisonActivity::class.java).apply {
+                putExtra("currency_pair_id", currencyPairId)
+            }
+            startActivity(intent)
+        }
         binding.currencyPairsListRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.currencyPairsListRecyclerView.adapter = adapter
     }
@@ -76,27 +82,27 @@ class CurrencyPairListActivity : AppCompatActivity() {
     fun handleState(state: CurrencyPairListState) {
         when {
             state.isLoading -> {
-                setViewVisibility(displayProgressBar = true)
+                setViewsVisibility(displayProgressBar = true)
             }
             state.error.isNotEmpty() -> {
-                setViewVisibility(displayErrorText = true)
-                binding.errorTextView.show(state.error)
+                setViewsVisibility(displayErrorText = true)
+                binding.errorText.show(state.error)
             }
             else -> {
-                setViewVisibility(displayCurrencyPairsList = true)
-                updateRecyclerView(state.currencyPairList)
+                setViewsVisibility(displayCurrencyPairsList = true)
+                adapter.updateCurrencyPairList(state.currencyPairList)
             }
         }
     }
 
-    private fun setViewVisibility(
+    private fun setViewsVisibility(
         displayProgressBar: Boolean = false,
         displayCurrencyPairsList: Boolean = false,
         displayErrorText: Boolean = false
     ) {
         binding.progressBar.setVisibility(displayProgressBar)
         binding.currencyPairsListRecyclerView.setVisibility(displayCurrencyPairsList)
-        binding.errorTextView.setVisibility(displayErrorText)
+        binding.errorText.setVisibility(displayErrorText)
     }
 
     private fun View.setVisibility(isVisible: Boolean) {
@@ -109,10 +115,5 @@ class CurrencyPairListActivity : AppCompatActivity() {
     private fun TextView.show(message: String) {
         this.text = message
         this.visibility = View.VISIBLE
-    }
-
-    private fun updateRecyclerView(currencyList: List<CurrencyPairListItemModel>) {
-        adapter = CurrencyPairListAdapter(currencyList)
-        binding.currencyPairsListRecyclerView.adapter = adapter
     }
 }

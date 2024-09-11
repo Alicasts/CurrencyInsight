@@ -10,15 +10,9 @@ object CurrencyPairTestMockData {
 
     private val jsonObject = generateResponse()
 
-
-    fun getJsonResponse(): JsonObject {
-        return jsonObject
-    }
-
     fun getJsonResponseAsString(): String {
         return jsonObject.toString()
     }
-
 
     fun parseCurrencyPairListResponse(jsonString: String): List<CurrencyPairListItemDto> {
         val jsonObject = jsonParser.parse(jsonString).asJsonObject

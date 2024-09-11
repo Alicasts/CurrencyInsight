@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.alicasts.currencyinsight.CurrencyInsightApplication"
+        android:name=".CurrencyInsightApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,10 +16,13 @@
         android:theme="@style/Theme.CurrencyInsight"
         tools:targetApi="31">
         <activity
-            android:name="com.alicasts.currencyinsight.presentation.currency_pair_list.CurrencyPairListActivity"
+            android:name=".presentation.currency_comparison.CurrencyComparisonActivity"
             android:exported="false" />
         <activity
-            android:name="com.alicasts.currencyinsight.presentation.MainActivity"
+            android:name=".presentation.currency_pair_list.CurrencyPairListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
