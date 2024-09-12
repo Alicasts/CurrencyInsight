@@ -1,13 +1,14 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
+import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 
 class CurrencyPairListAdapter(
-    private var currencyPairList: List<CurrencyPairListItemModel>,
+    private var currencyPairList: MutableList<CurrencyPairListItemModel>,
     private val onItemClicked: (String) -> Unit
 ) : RecyclerView.Adapter<CurrencyPairListAdapter.CurrencyPairViewHolder>() {
 
@@ -26,22 +27,11 @@ class CurrencyPairListAdapter(
 
     override fun getItemCount(): Int = currencyPairList.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCurrencyPairList(newList: List<CurrencyPairListItemModel>) {
-        val oldListSize = currencyPairList.size
-        currencyPairList = newList
-        val newListSize = currencyPairList.size
-
-        when {
-            newListSize > oldListSize -> {
-                notifyItemRangeInserted(oldListSize, newListSize - oldListSize)
-            }
-            newListSize < oldListSize -> {
-                notifyItemRangeRemoved(newListSize, oldListSize - newListSize)
-            }
-            else -> {
-                notifyItemRangeChanged(0, newListSize)
-            }
-        }
+        currencyPairList.clear()
+        currencyPairList.addAll(newList)
+        notifyDataSetChanged()
     }
 
     class CurrencyPairViewHolder(

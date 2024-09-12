@@ -22,13 +22,13 @@ class CurrencyPairAdapterTest {
 
     private lateinit var scenario: ActivityScenario<CurrencyPairListActivity>
     private lateinit var adapter: CurrencyPairListAdapter
-    private lateinit var currencyPairs: List<CurrencyPairListItemModel>
+    private lateinit var currencyPairs: MutableList<CurrencyPairListItemModel>
 
     @Before
     fun setUp() {
         hiltRule.inject()
 
-        currencyPairs = listOf(
+        currencyPairs = mutableListOf(
             CurrencyPairListItemModel("USD/EUR", "US Dollar/Euro"),
             CurrencyPairListItemModel("GBP/USD", "British Pound/US Dollar")
         )
