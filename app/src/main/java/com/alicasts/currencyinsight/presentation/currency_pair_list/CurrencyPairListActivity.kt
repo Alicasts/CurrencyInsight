@@ -1,21 +1,28 @@
 package com.alicasts.currencyinsight.presentation.currency_pair_list
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyPairListBinding
 import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyComparisonActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CurrencyPairListActivity : AppCompatActivity() {
 
     private val currencyPairListViewModel: CurrencyPairListViewModel by viewModels()
+    private var isMenuFabExpanded = false
 
     private val binding by lazy {
         ActivityCurrencyPairListBinding.inflate( layoutInflater )
@@ -29,7 +36,69 @@ class CurrencyPairListActivity : AppCompatActivity() {
 
         setupSearchView()
         setupRecyclerView()
+        setupFloatingActionButtonMenu()
         observeViewModel()
+
+    }
+
+    private fun setupFloatingActionButtonMenu() {
+        val menuFloatingActionButton = binding.floatingActionButton
+        val buttonsContainer = binding.buttonsContainer
+        menuFloatingActionButton.setOnClickListener {
+
+            if (isMenuFabExpanded) {
+                collapseButtonContainer(menuFloatingActionButton, buttonsContainer)
+            } else {
+                expandButtonContainer(menuFloatingActionButton, buttonsContainer)
+            }
+            isMenuFabExpanded = !isMenuFabExpanded
+        }
+    }
+
+    private fun expandButtonContainer(floatingActionButton: FloatingActionButton, buttonsContainer: LinearLayout) {
+        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_down_arrow)
+        buttonsContainer.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate()
+                .alpha(1f)
+                .setDuration(500)
+                .setListener(null)
+        }
+    }
+
+    private fun collapseButtonContainer(floatingActionButton: FloatingActionButton, buttonsContainer: LinearLayout) {
+        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_menu)
+        buttonsContainer.animate()
+            .alpha(0f)
+            .setDuration(500)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    buttonsContainer.visibility = View.GONE
+                }
+            })
+    }
+
+    private fun changeFabIconWithAnimation(floatingActionButton: FloatingActionButton, newIconRes: Int) {
+        val fadeOutAnimator = ObjectAnimator.ofFloat(floatingActionButton.drawable, buildString { append("alpha") }, 1f, 0f)
+
+        fadeOutAnimator.duration = 450
+
+        fadeOutAnimator.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                floatingActionButton.setImageResource(newIconRes)
+
+                val fadeInAnimator = ObjectAnimator.ofFloat(
+                    floatingActionButton.drawable,
+                    buildString { append("alpha") },
+                    0f,
+                    1f
+                )
+                fadeInAnimator.duration = 450
+                fadeInAnimator.start()
+            }
+        })
+        fadeOutAnimator.start()
     }
 
     private fun setupSearchView() {

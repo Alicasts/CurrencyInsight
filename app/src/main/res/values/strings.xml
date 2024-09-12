@@ -4,4 +4,7 @@
     <string name="dummy_abbreviations">DU1 - DU2</string>
     <string name="default_target_currency_value">1</string>
     <string name="currency_name">Currency Name</string>
+    <string name="floating_action_button">Menu Button</string>
+    <string name="info">Info</string>
+    <string name="settings">Settings</string>
 </resources>
