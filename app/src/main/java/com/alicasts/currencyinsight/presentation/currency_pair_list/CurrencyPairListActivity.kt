@@ -51,9 +51,9 @@ class CurrencyPairListActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(query: String?): Boolean {
                 query?.let {
-                    if (it.length >= 3) {
+                    if (it.isNotEmpty()) {
                         currencyPairListViewModel.filterCurrencyPairList(it)
-                    } else if (it.isEmpty()) {
+                    } else {
                         currencyPairListViewModel.filterCurrencyPairList("")
                     }
                 }
@@ -63,7 +63,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = CurrencyPairListAdapter(emptyList()) { currencyPairId ->
+        adapter = CurrencyPairListAdapter(mutableListOf()) { currencyPairId ->
             val intent = Intent(this, CurrencyComparisonActivity::class.java).apply {
                 putExtra("currency_pair_id", currencyPairId)
             }
