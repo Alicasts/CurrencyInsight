@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.databinding.ActivityCurrencyPairListBinding
 import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyComparisonActivity
+import com.alicasts.currencyinsight.presentation.currency_pair_list.fragments.InfoDialogFragment
+import com.alicasts.currencyinsight.presentation.currency_pair_list.fragments.SettingsDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,6 +46,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
     private fun setupFloatingActionButtonMenu() {
         val menuFloatingActionButton = binding.floatingActionButton
         val buttonsContainer = binding.buttonsContainer
+        setupContainerButtons()
         menuFloatingActionButton.setOnClickListener {
 
             if (isMenuFabExpanded) {
@@ -55,8 +58,20 @@ class CurrencyPairListActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupContainerButtons() {
+        val infoButton = binding.infoFloatingActionButton
+        val settingsButton = binding.settingsFloatingActionButton
+        infoButton.setOnClickListener {
+            InfoDialogFragment().show(supportFragmentManager, "InfoDialogFragment")
+        }
+
+        settingsButton.setOnClickListener {
+            SettingsDialogFragment().show(supportFragmentManager, "SettingsDialogFragment")
+        }
+    }
+
     private fun expandButtonContainer(floatingActionButton: FloatingActionButton, buttonsContainer: LinearLayout) {
-        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_down_arrow)
+        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_menu_down)
         buttonsContainer.apply {
             alpha = 0f
             visibility = View.VISIBLE
@@ -68,7 +83,7 @@ class CurrencyPairListActivity : AppCompatActivity() {
     }
 
     private fun collapseButtonContainer(floatingActionButton: FloatingActionButton, buttonsContainer: LinearLayout) {
-        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_menu)
+        changeFabIconWithAnimation(floatingActionButton,R.drawable.ic_menu_up)
         buttonsContainer.animate()
             .alpha(0f)
             .setDuration(500)
