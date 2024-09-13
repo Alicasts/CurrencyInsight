@@ -15,4 +15,9 @@
     <string name="https_github_com_alicasts_currencyinsight">Application source:
         https://github.com/Alicasts/CurrencyInsight</string>
     <string name="application_descprition">The application fetches a new list of currency pairs 24 hours after the last update. For currency comparisons, data is refreshed every 4 hours following the last fetch. In the Settings tab, users can modify only the comparison period, with options for 15, 30, or 90 days.</string>
+    <string name="_15_days">15 days</string>
+    <string name="_30_days">30 days</string>
+    <string name="_90_days">90 days</string>
+    <string name="retrieve_data_for_the_past">Retrieve data for the past</string>
+    <string name="dark_mode">Dark mode</string>
 </resources>
