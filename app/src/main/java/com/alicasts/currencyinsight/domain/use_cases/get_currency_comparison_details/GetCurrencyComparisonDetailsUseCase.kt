@@ -1,7 +1,9 @@
 package com.alicasts.currencyinsight.domain.use_cases.get_currency_comparison_details
 
+import android.content.SharedPreferences
 import com.alicasts.currencyinsight.common.Resource
 import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
+import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyHistoricalData
 import com.alicasts.currencyinsight.domain.repository.local.LocalCurrencyPairRepository
 import com.alicasts.currencyinsight.domain.repository.remote.RemoteCurrencyPairRepository
 import kotlinx.coroutines.flow.Flow
@@ -15,17 +17,17 @@ import javax.inject.Inject
 
 class GetCurrencyComparisonDetailsUseCase @Inject constructor(
     private val remoteRepository: RemoteCurrencyPairRepository,
-    private val localRepository: LocalCurrencyPairRepository
+    private val localRepository: LocalCurrencyPairRepository,
+    private val sharedPreferences: SharedPreferences
 ) {
-    operator fun invoke(currencyPairId: String, num: Int = 15): Flow<Resource<CurrencyComparisonDetails>> = flow {
+    operator fun invoke(currencyPairId: String): Flow<Resource<CurrencyComparisonDetails>> = flow {
         try {
             emit(Resource.Loading())
-            val localData = localRepository.getLocalCurrencyComparisonWithDetails(currencyPairId, num)
+            val localData = localRepository.getLocalCurrencyComparisonWithDetails(comparisonCode = currencyPairId)
 
-            val currencyComparisonDetails =
-                if(shouldFetchRemoteData(localData))
-                    fetchAndPersistRemoteData(currencyPairId, num)
-                else localData
+            val currencyComparisonDetails = if (shouldUpdateData(localData = localData)) {
+                updateCurrencyComparisonData(currencyPairId = currencyPairId)
+            } else localData
 
             emit(Resource.Success(currencyComparisonDetails!!))
         } catch (e: HttpException) {
@@ -35,27 +37,45 @@ class GetCurrencyComparisonDetailsUseCase @Inject constructor(
         }
     }
 
-    private fun shouldFetchRemoteData(localData: CurrencyComparisonDetails?): Boolean {
-        if (localData == null) return true
-        val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
-        localData.let {
-            val createDate: Date? = dateTimeFormatter.parse(it.createDate)
-
-            createDate?.let { date ->
-                val now = Date()
-                val diffInMillis = now.time - date.time
-                val diffInHours = diffInMillis / (1000 * 60 * 60)
-
-                return diffInHours >= 4
-            }
-        }
-        return false
+    private fun shouldUpdateData(localData: CurrencyComparisonDetails?): Boolean {
+        return localData == null ||
+            isOutdated(localData.createDate) ||
+            daysToFetchHasChanged(localData.historicalData)
     }
 
-    private suspend fun fetchAndPersistRemoteData(currencyPairId: String, num: Int): CurrencyComparisonDetails? {
-        val detailDto = remoteRepository.getRemoteCurrencyComparisonWithDetails(currencyPairId, num)
-        localRepository.persistComparisonDetails(detailDto)
-        return localRepository.getLocalCurrencyComparisonWithDetails(currencyPairId, num)
+    private fun daysToFetchHasChanged(historicalData: List<CurrencyHistoricalData>) = ((historicalData.size + 1) !=
+    getDaysToFetchData())
+
+
+    private fun isOutdated(createDate: String): Boolean {
+        val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val parsedCreateDate = dateTimeFormatter.parse(createDate) ?: return true
+
+        val diffInHours = (Date().time - parsedCreateDate.time) / (1000 * 60 * 60)
+        return diffInHours >= 4
+    }
+
+    private fun getDaysToFetchData() = sharedPreferences.getInt("days_to_fetch_data", 15)
+
+
+    private suspend fun fetchAndPersistRemoteData(
+        currencyPairId: String,
+        daysToFetch: Int
+    ): CurrencyComparisonDetails? {
+        val detailDto = remoteRepository.getRemoteCurrencyComparisonWithDetails(currencyPairId, daysToFetch)
+
+        localRepository.apply {
+            deleteCurrencyComparison(currencyPairId)
+            clearSelectedHistoricalData(currencyPairId)
+            persistComparisonDetails(detailDto)
+        }
+
+        return localRepository.getLocalCurrencyComparisonWithDetails(currencyPairId)
+    }
+
+    private suspend fun updateCurrencyComparisonData(currencyPairId: String): CurrencyComparisonDetails {
+        localRepository.deleteCurrencyComparison(currencyPairId)
+        val currencyComparisonDetails = fetchAndPersistRemoteData(currencyPairId, getDaysToFetchData())
+        return currencyComparisonDetails!!
     }
 }

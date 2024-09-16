@@ -44,7 +44,7 @@ class LocalCurrencyPairRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLocalCurrencyComparisonWithDetails(
-        comparisonCode: String, days: Int
+        comparisonCode: String
     ): CurrencyComparisonDetails? {
 
         val localData = currencyComparisonDao.getCurrencyComparisonWithHistoricalData(comparisonCode) ?: return null
@@ -71,7 +71,6 @@ class LocalCurrencyPairRepositoryImpl @Inject constructor(
         val historicalDataEntities = currencyComparisonMapper.mapToHistoricalEntities(historicalDataDtos, comparisonEntity.comparisonCode)
 
         insertCurrencyComparison(comparisonEntity)
-        clearSelectedHistoricalData(comparisonEntity.comparisonCode)
         insertHistoricalData(historicalDataEntities)
     }
 
@@ -82,5 +81,9 @@ class LocalCurrencyPairRepositoryImpl @Inject constructor(
 
     override suspend fun clearSelectedHistoricalData(comparisonCode: String) {
         currencyComparisonDao.deleteHistoricalData(comparisonCode)
+    }
+
+    override suspend fun deleteCurrencyComparison(comparisonCode: String) {
+        currencyComparisonDao.deleteCurrencyComparison(comparisonCode)
     }
 }

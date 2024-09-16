@@ -32,9 +32,9 @@ class CurrencyComparisonViewModel @Inject constructor(
         }
     }
 
-    fun getCurrencyComparisonDetails(currencyPairId: String, num: Int = 15) {
+    fun getCurrencyComparisonDetails(currencyPairId: String) {
         viewModelScope.launch {
-            getCurrencyComparisonDetailsUseCase(currencyPairId, num).onEach { result ->
+            getCurrencyComparisonDetailsUseCase(currencyPairId).onEach { result ->
                 when (result) {
                     is Resource.Success -> {
                         _state.postValue(

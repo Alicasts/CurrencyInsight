@@ -11,11 +11,12 @@ import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPair
 interface LocalCurrencyPairRepository {
     suspend fun getLastFetchDate(): Long
     suspend fun getCurrencyPairsList(): List<CurrencyPairListEntity>
-    suspend fun getLocalCurrencyComparisonWithDetails(comparisonCode: String, days: Int): CurrencyComparisonDetails?
+    suspend fun getLocalCurrencyComparisonWithDetails(comparisonCode: String): CurrencyComparisonDetails?
     suspend fun insertCurrencyComparison(comparisonEntity: CurrencyComparisonEntity)
     suspend fun insertHistoricalData(historicalDataEntities: List<CurrencyHistoricalDataEntity>)
     suspend fun getCurrencyPairsModelList(): List<CurrencyPairListItemModel>
     suspend fun persistComparisonDetails(detailDto: CurrencyComparisonDetailDto)
     suspend fun persistUpdatedList(currencyPairListDto: List<CurrencyPairListItemDto>)
+    suspend fun deleteCurrencyComparison(comparisonCode: String)
     suspend fun clearSelectedHistoricalData(comparisonCode: String)
 }
