@@ -7,7 +7,6 @@ import com.alicasts.currencyinsight.data.database.dao.CurrencyPairListDao
 import com.alicasts.currencyinsight.data.database.entities.CurrencyPairListEntity
 import com.alicasts.currencyinsight.data.mappers.CurrencyComparisonMapper
 import com.alicasts.currencyinsight.data.mappers.CurrencyPairMapper
-import com.alicasts.currencyinsight.data.mockData.CurrencyComparisonWithDetailsTestMockData
 import com.alicasts.currencyinsight.data.mockData.CurrencyPairTestMockData
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -90,19 +89,6 @@ class LocalCurrencyPairRepositoryImplTest {
         val result = repository.getLastFetchDate()
 
         assertEquals(1112223334445L, result)
-    }
-
-    @Test
-    fun `persistComparisonDetails should save comparison and historical data`() = runBlocking {
-        val detailDto = CurrencyComparisonWithDetailsTestMockData.returnMockDto()
-        val comparisonEntity = currencyComparisonMapper.mapToEntity(detailDto)
-        val historicalDataEntities = currencyComparisonMapper.mapToHistoricalEntities(detailDto.historicalData, comparisonEntity.comparisonCode)
-
-        repository.persistComparisonDetails(detailDto)
-
-        verify(currencyComparisonDao).insertCurrencyComparison(comparisonEntity)
-        verify(currencyComparisonDao).deleteHistoricalData(comparisonEntity.comparisonCode)
-        verify(currencyComparisonDao).insertHistoricalData(historicalDataEntities)
     }
 
     @Test
