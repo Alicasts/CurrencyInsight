@@ -6,16 +6,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.DialogFragment
 import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.databinding.FragmentSettingsBinding
 
 class SettingsDialogFragment : DialogFragment() {
 
-    private lateinit var sharedPreferences: SharedPreferences
-
     private val binding by lazy {
         FragmentSettingsBinding.inflate(layoutInflater)
+    }
+
+    private val sharedPreferences by lazy {
+        requireContext().getSharedPreferences("com.alicasts.currencyinsight", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -38,6 +41,7 @@ class SettingsDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRadioGroupButtons()
+        setupThemeSwitch()
 
         binding.closeSettingsButton.setOnClickListener {
             dismiss()
@@ -45,8 +49,6 @@ class SettingsDialogFragment : DialogFragment() {
     }
 
     private fun setupRadioGroupButtons() {
-        sharedPreferences = requireContext().getSharedPreferences("com.alicasts.currencyinsight", Context.MODE_PRIVATE)
-
         val daysToFetchNumber = sharedPreferences.getInt("days_to_fetch_data", 15)
 
         when (daysToFetchNumber) {
@@ -65,6 +67,26 @@ class SettingsDialogFragment : DialogFragment() {
             }
 
             editor.apply()
+        }
+    }
+
+    private fun setupThemeSwitch() {
+        val isDarkModeEnabled = sharedPreferences.getBoolean("dark_mode_enabled", false)
+        binding.darkModeSwitch.isChecked = isDarkModeEnabled
+
+        binding.darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("dark_mode_enabled", isChecked)
+            editor.apply()
+            applyTheme(isChecked)
+        }
+    }
+
+    private fun applyTheme(isDarkModeEnabled: Boolean) {
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 }
