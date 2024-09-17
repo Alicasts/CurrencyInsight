@@ -13,7 +13,7 @@ import com.alicasts.currencyinsight.presentation.currency_comparison.CurrencyCom
 class DetailsFragment : Fragment() {
 
     lateinit var binding: FragmentDetailsBinding
-    val currencyComparisonViewModel: CurrencyComparisonViewModel by activityViewModels()
+    private val currencyComparisonViewModel: CurrencyComparisonViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

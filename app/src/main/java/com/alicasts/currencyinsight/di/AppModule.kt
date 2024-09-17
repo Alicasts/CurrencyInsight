@@ -103,7 +103,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences("currency_insight_prefs", Context.MODE_PRIVATE)
+        return context.getSharedPreferences("com.alicasts.currencyinsight", Context.MODE_PRIVATE)
     }
 
     @Provides

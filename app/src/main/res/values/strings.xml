@@ -4,4 +4,20 @@
     <string name="dummy_abbreviations">DU1 - DU2</string>
     <string name="default_target_currency_value">1</string>
     <string name="currency_name">Currency Name</string>
+    <string name="floating_action_button">Menu Button</string>
+    <string name="info">Info</string>
+    <string name="settings">Settings</string>
+    <string name="this_application_has_no_commercial_purposes">This Application has no commercial purposes</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="api">API:</string>
+    <string name="api_https_awesomeapi_com_br_api_de_moedas">API:
+        https://awesomeapi.com.br/api-de-moedas</string>
+    <string name="https_github_com_alicasts_currencyinsight">Application source:
+        https://github.com/Alicasts/CurrencyInsight</string>
+    <string name="application_descprition">The application fetches a new list of currency pairs 24 hours after the last update. For currency comparisons, data is refreshed every 4 hours following the last fetch. In the Settings tab, users can modify only the comparison period, with options for 15, 30, or 90 days.</string>
+    <string name="_15_days">15 days</string>
+    <string name="_30_days">30 days</string>
+    <string name="_90_days">90 days</string>
+    <string name="retrieve_data_for_the_past">Retrieve data for the past</string>
+    <string name="dark_mode">Dark mode</string>
 </resources>

@@ -53,14 +53,14 @@ class CurrencyComparisonViewModelTest {
     fun `should load comparison details successfully and update state`() = runTest {
         val mockComparisonDetails = CurrencyComparisonWithDetailsTestMockData.returnMockCurrencyComparisonDetails()
 
-        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL", 15) } returns flow {
+        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL") } returns flow {
             emit(Resource.Success(mockComparisonDetails))
         }
 
         val observer = mockk<Observer<CurrencyComparisonState>>(relaxed = true)
         viewModel.state.observeForever(observer)
 
-        viewModel.getCurrencyComparisonDetails("USD_BRL", 15)
+        viewModel.getCurrencyComparisonDetails("USD_BRL")
 
         verify {
             observer.onChanged(CurrencyComparisonState(comparisonDetails = mockComparisonDetails))
@@ -71,14 +71,14 @@ class CurrencyComparisonViewModelTest {
     fun `should emit error state when comparison details loading fails`() = runTest {
         val errorMessage = "An unexpected error occurred."
 
-        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL", 15) } returns flow {
+        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL") } returns flow {
             emit(Resource.Error(errorMessage))
         }
 
         val observer = mockk<Observer<CurrencyComparisonState>>(relaxed = true)
         viewModel.state.observeForever(observer)
 
-        viewModel.getCurrencyComparisonDetails("USD_BRL", 15)
+        viewModel.getCurrencyComparisonDetails("USD_BRL")
 
         verify {
             observer.onChanged(CurrencyComparisonState(error = errorMessage))
@@ -87,14 +87,14 @@ class CurrencyComparisonViewModelTest {
 
     @Test
     fun `should set loading state when fetching comparison details`() = runTest {
-        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL", 15) } returns flow {
+        coEvery { getCurrencyComparisonDetailsUseCase("USD_BRL") } returns flow {
             emit(Resource.Loading())
         }
 
         val observer = mockk<Observer<CurrencyComparisonState>>(relaxed = true)
         viewModel.state.observeForever(observer)
 
-        viewModel.getCurrencyComparisonDetails("USD_BRL", 15)
+        viewModel.getCurrencyComparisonDetails("USD_BRL")
 
         verify {
             observer.onChanged(CurrencyComparisonState(isLoading = true))
