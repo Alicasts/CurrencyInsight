@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/colorBackground"
     android:layout_height="wrap_content"
     android:padding="16dp">
 
@@ -12,8 +13,8 @@
         android:layout_height="wrap_content"
         android:text="@string/info"
         android:textSize="24sp"
+        android:textColor="@color/primary_text_color"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,6 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/this_application_has_no_commercial_purposes"
+        android:textColor="@color/primary_text_color"
+
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginTop="32dp"
@@ -36,6 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/application_descprition"
+        android:textColor="@color/primary_text_color"
         android:gravity="center"
         android:textSize="16sp"
         android:layout_marginTop="32dp"
@@ -52,6 +56,8 @@
         android:gravity="center"
         android:linksClickable="true"
         android:text="@string/api_https_awesomeapi_com_br_api_de_moedas"
+        android:textColor="@color/primary_text_color"
+
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +72,7 @@
         android:gravity="center"
         android:autoLink="web"
         android:text="@string/https_github_com_alicasts_currencyinsight"
+        android:textColor="@color/primary_text_color"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/api_link_text_view" />
@@ -76,6 +83,8 @@
         android:layout_height="wrap_content"
         android:text="@string/dismiss"
         android:layout_marginTop="40dp"
+        android:backgroundTint="@color/button_primary_background_color"
+        android:textColor="@color/button_text_color"
         app:layout_constraintTop_toBottomOf="@id/git_link_text_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

@@ -32,15 +32,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/search_view"
-        android:searchHintIcon="@drawable/ic_settings"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginTop="4dp"
         android:layout_marginHorizontal="4dp"
         android:queryHint="Search"
         android:background="@drawable/rounded_background"
+        android:queryBackground="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,6 +63,7 @@
         android:clickable="true"
         android:focusable="true"
         android:contentDescription="@string/floating_action_button"
+        android:backgroundTint="@color/button_primary_background_color"
         app:shapeAppearance="@style/rounded_button"
         app:srcCompat="@drawable/ic_menu_up"
         app:maxImageSize="32dp"
@@ -87,6 +88,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/info"
+            android:backgroundTint="@color/button_primary_background_color"
             app:shapeAppearance="@style/rounded_button"
             app:srcCompat="@drawable/ic_info"
             app:maxImageSize="32dp"
@@ -101,6 +103,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="12dp"
             android:contentDescription="@string/settings"
+            android:backgroundTint="@color/button_primary_background_color"
             app:shapeAppearance="@style/rounded_button"
             app:srcCompat="@drawable/ic_settings"
             app:maxImageSize="32dp"

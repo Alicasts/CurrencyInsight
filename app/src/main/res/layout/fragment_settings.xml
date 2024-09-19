@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorBackground"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
@@ -14,7 +15,7 @@
         android:text="@string/settings"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primary_text_color"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,6 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/retrieve_data_for_the_past"
+        android:textColor="@color/primary_text_color"
         android:textSize="16sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -48,6 +50,7 @@
             android:layout_width="wrap_content"
             android:layoutDirection="rtl"
             android:textStyle="bold"
+            android:textColor="@color/primary_text_color"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:text="@string/_15_days"/>
@@ -57,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-
+            android:textColor="@color/primary_text_color"
             android:layout_marginHorizontal="12dp"
             android:layoutDirection="rtl"
             android:text="@string/_30_days" />
@@ -67,6 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textColor="@color/primary_text_color"
             android:layout_marginHorizontal="12dp"
             android:layoutDirection="rtl"
             android:text="@string/_90_days" />
@@ -79,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/dark_mode"
+        android:textColor="@color/primary_text_color"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,8 +95,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dismiss"
-        android:layout_marginTop="40dp"
+        android:textColor="@color/button_text_color"
 
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/button_primary_background_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dark_mode_switch" />

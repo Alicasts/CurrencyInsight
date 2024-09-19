@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.alicasts.currencyinsight.databinding.ItemCurrencyPairBinding
+import com.alicasts.currencyinsight.databinding.ItemListCurrencyPairBinding
 import com.alicasts.currencyinsight.domain.model.currency_pair_list.CurrencyPairListItemModel
 
 class CurrencyPairListAdapter(
@@ -13,7 +13,7 @@ class CurrencyPairListAdapter(
 ) : RecyclerView.Adapter<CurrencyPairListAdapter.CurrencyPairViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyPairViewHolder {
-        val binding = ItemCurrencyPairBinding.inflate(
+        val binding = ItemListCurrencyPairBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -35,7 +35,7 @@ class CurrencyPairListAdapter(
     }
 
     class CurrencyPairViewHolder(
-        private val binding: ItemCurrencyPairBinding,
+        private val binding: ItemListCurrencyPairBinding,
         private val onItemClicked: (String) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 

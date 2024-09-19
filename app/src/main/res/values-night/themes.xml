@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.CurrencyInsight.Dark" parent="Theme.Material3.Dark.NoActionBar">
 
-        <item name="colorPrimary">@color/colorOnSecondary</item>
-        <item name="colorPrimaryVariant">@color/batata</item>
+        <item name="colorPrimary">@color/emerald</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
 
         <item name="colorSecondary">@color/colorError</item>
@@ -12,8 +12,10 @@
         <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="android:statusBarColor">@color/transparent</item>
 
         <item name="colorError">@color/colorError</item>
         <item name="colorOnError">@color/colorOnError</item>
+
     </style>
 </resources>
