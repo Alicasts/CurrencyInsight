@@ -73,8 +73,8 @@ class CardRowAdapterTest {
 
             adapter.onBindViewHolder(viewHolder, 0)
 
-            assertEquals("Row 1 Key", viewHolder.binding.firstTextView.text)
-            assertEquals("Row 1 Value", viewHolder.binding.secondTextView.text)
+            assertEquals("Row 1 Key", viewHolder.binding.labelTextView.text)
+            assertEquals("Row 1 Value", viewHolder.binding.valueTextView.text)
         }
     }
 }

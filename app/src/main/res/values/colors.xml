@@ -15,6 +15,7 @@
     <color name="abbey">#4D4F51</color>
     <color name="mine_shaft">#3C3C3C</color>
     <color name="firefly">#0C212C</color>
+    <color name="alto">#D1D0D0</color>
 
 
     <color name="colorPrimary">@color/pickled_bluewood</color>
@@ -25,7 +26,7 @@
     <color name="colorSecondaryVariant">@color/emerald</color>
     <color name="colorOnSecondary">@color/black</color>
 
-    <color name="colorBackground">@color/silver</color>
+    <color name="colorBackground">@color/alto</color>
     <color name="colorSurface">@color/silver</color>
     <color name="colorOnSurface">@color/black</color>
 
@@ -34,8 +35,11 @@
 
     <color name="primary_text_color">@color/abbey</color>
     <color name="secondary_text_color">@color/mine_shaft</color>
+    <color name="tertiary_text_color">@color/mine_shaft</color>
     <color name="button_text_color">@color/silver</color>
 
     <color name="button_primary_background_color">@color/firefly</color>
+    <color name="input_fields_background_color">@color/porcelain</color>
+    <color name="input_fields_stroke_color">@color/pickled_bluewood</color>
 
 </resources>
