@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#BB86FC</color>
-    <color name="colorPrimaryVariant">#3700B3</color>
-    <color name="colorOnPrimary">#000000</color>
+    <color name="colorPrimary">@color/venice_blue</color>
+    <color name="colorPrimaryVariant">@color/persian_green</color>
+    <color name="colorOnPrimary">@color/black</color>
 
-    <color name="colorSecondary">#03DAC6</color>
-    <color name="colorSecondaryVariant">#018786</color>
-    <color name="colorOnSecondary">#000000</color>
+    <color name="colorSecondary">@color/deep_cerulean</color>
+    <color name="colorSecondaryVariant">@color/deep_cerulean</color>
+    <color name="colorOnSecondary">@color/white</color>
 
-    <color name="colorBackground">#121212</color>
-    <color name="colorSurface">#121212</color>
-    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorBackground">@color/abbey</color>
+    <color name="colorSurface">@color/abbey</color>
+    <color name="colorOnSurface">@color/black</color>
 
-    <color name="colorError">#CF6679</color>
-    <color name="colorOnError">#000000</color>
+    <color name="colorError">@color/red</color>
+    <color name="colorOnError">@color/white</color>
+
+    <color name="primary_text_color">@color/silver</color>
+    <color name="secondary_text_color">@color/porcelain</color>
+    <color name="tertiary_text_color">@color/pickled_bluewood</color>
+    <color name="button_text_color">@color/silver</color>
+
+    <color name="button_primary_background_color">@color/mine_shaft</color>
+    <color name="input_fields_background_color">@color/silver</color>
+    <color name="input_fields_stroke_color">@color/persian_green</color>
+
 </resources>

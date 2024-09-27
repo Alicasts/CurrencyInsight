@@ -1,5 +1,7 @@
 package com.alicasts.currencyinsight.presentation.currency_comparison.details_fragment.chart
 
+import android.content.res.Configuration
+import android.graphics.Typeface
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -43,6 +47,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
+import com.alicasts.currencyinsight.R
 import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyComparisonDetails
 import com.alicasts.currencyinsight.domain.model.currency_comparison.CurrencyHistoricalData
 import java.text.SimpleDateFormat
@@ -56,7 +61,9 @@ fun BidChartComposable(
     val chartValues = buildChartValues(currencyComparisonDetails)
     val timestamps = buildTimestamps(currencyComparisonDetails)
 
-    val chartColor = Color.Blue
+    val chartColor = colorResource(id = R.color.colorPrimaryVariant)
+    val fontColor = colorResource(id = R.color.secondary_text_color)
+    val zoomLabelFontColor = colorResource(id = R.color.tertiary_text_color)
     val labelFontSize = 12.sp
     val adjustedMinValue = chartValues.min() * 0.5f
     val adjustedMaxValue = chartValues.max() * 1.1f
@@ -73,6 +80,9 @@ fun BidChartComposable(
         ChartHeader(
             currencyComparisonDetails = currencyComparisonDetails,
             zoomFactor =  zoomFactor,
+            headerFontColor = fontColor,
+            zoomButtonColor = chartColor,
+            zoomLabelFontColor = zoomLabelFontColor,
             onZoomChange = {
             newZoomFactor ->
             zoomFactor = newZoomFactor.coerceIn(0.8f, 1.6f)
@@ -85,7 +95,7 @@ fun BidChartComposable(
         ) {
             Canvas(
                 modifier = Modifier
-                    .width((chartValues.size * 80.dp * zoomFactor) )
+                    .width((chartValues.size * 100.dp * zoomFactor))
                     .height(300.dp)
                     .testTag("BidChart")
             ) {
@@ -95,6 +105,7 @@ fun BidChartComposable(
                     chartColor = chartColor,
                     adjustedMinValue = adjustedMinValue,
                     adjustedMaxValue = adjustedMaxValue,
+                    fontColorId = fontColor,
                     labelFontSize = labelFontSize
                 )
             }
@@ -106,6 +117,9 @@ fun BidChartComposable(
 fun ChartHeader(
     currencyComparisonDetails: CurrencyComparisonDetails,
     zoomFactor: Float,
+    headerFontColor: Color,
+    zoomButtonColor: Color,
+    zoomLabelFontColor : Color,
     onZoomChange: (Float) ->
     Unit
 ) {
@@ -118,7 +132,8 @@ fun ChartHeader(
             text = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
-                        fontWeight = FontWeight.W300,
+                        fontWeight = FontWeight.W500,
+                        color = headerFontColor,
                         fontStyle = FontStyle.Italic,
                         fontSize = 20.sp
                     )
@@ -135,6 +150,8 @@ fun ChartHeader(
         ) {
             ZoomButton(
                 label = "-",
+                zoomLabelFontColor = zoomLabelFontColor,
+                enabledColor = zoomButtonColor,
                 enabled = zoomFactor > 0.8f
             ) {
                 onZoomChange(zoomFactor - 0.2f)
@@ -144,6 +161,8 @@ fun ChartHeader(
             )
             ZoomButton(
                 label = "+",
+                zoomLabelFontColor = zoomLabelFontColor,
+                enabledColor = zoomButtonColor,
                 enabled = zoomFactor < 1.6f
             ) {
                 onZoomChange(zoomFactor + 0.2f)
@@ -155,6 +174,8 @@ fun ChartHeader(
 @Composable
 fun ZoomButton(
     label: String,
+    zoomLabelFontColor: Color,
+    enabledColor: Color,
     enabled: Boolean,
     onClick: () -> Unit
 ) {
@@ -162,10 +183,16 @@ fun ZoomButton(
         onClick = onClick,
         enabled = enabled,
         shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (enabled) enabledColor else Color.DarkGray
+        ),
         modifier = Modifier.size(32.dp),
         contentPadding = PaddingValues(0.dp)
     ) {
-        Text(label)
+        Text(
+            text = label,
+            color = zoomLabelFontColor
+        )
     }
 }
 
@@ -188,6 +215,7 @@ fun DrawScope.drawChart(
     chartValues: List<Float>,
     timestamps: List<String>,
     chartColor: Color,
+    fontColorId: Color,
     adjustedMinValue: Float,
     adjustedMaxValue: Float,
     labelFontSize: TextUnit
@@ -207,7 +235,7 @@ fun DrawScope.drawChart(
     drawPath(
         path = gradientPath,
         brush = Brush.verticalGradient(
-            colors = listOf(chartColor.copy(alpha = 0.5f), Color.Transparent),
+            colors = listOf(chartColor.copy(alpha = 0.8f), Color.Transparent),
             startY = 0f,
             endY = height)
     )
@@ -227,7 +255,8 @@ fun DrawScope.drawChart(
         yOffset = yOffset,
         spacing = spacing,
         adjustedMaxValue = adjustedMaxValue,
-        labelFontSize = labelFontSize
+        labelFontSize = labelFontSize,
+        fontColor = fontColorId
     )
 }
 
@@ -284,7 +313,8 @@ fun DrawScope.drawLabels(
     yOffset: Float,
     spacing: Float,
     adjustedMaxValue: Float,
-    labelFontSize: TextUnit
+    labelFontSize: TextUnit,
+    fontColor: Color
 ) {
     chartValues.forEachIndexed { index, value ->
         val x = xOffset + index * spacing
@@ -294,7 +324,7 @@ fun DrawScope.drawLabels(
         drawContext.canvas.nativeCanvas.drawText(
             yLabel, x - 24.dp.toPx(), y - 10.dp.toPx(), android.graphics.Paint().apply {
                 textSize = labelFontSize.toPx()
-                color = android.graphics.Color.BLACK
+                color = fontColor.toArgb()
             }
         )
     }
@@ -306,7 +336,10 @@ fun DrawScope.drawLabels(
         drawContext.canvas.nativeCanvas.drawText(
             timestamp, x - 20.dp.toPx(), y - 4.dp.toPx(), android.graphics.Paint().apply {
                 textSize = labelFontSize.toPx()
-                color = android.graphics.Color.BLACK
+                typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                isFakeBoldText = true
+                style = android.graphics.Paint.Style.FILL_AND_STROKE
+                color = fontColor.toArgb()
             }
         )
     }
@@ -315,7 +348,18 @@ fun DrawScope.drawLabels(
 @Preview(showBackground = true)
 @Composable
 fun PreviewBidChartComposable() {
-    val exampleDetails = CurrencyComparisonDetails(
+    BidChartComposable(currencyComparisonDetails = exampleCurrencyComparisonDetails())
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewBidChartComposableDarkMode() {
+    BidChartComposable(currencyComparisonDetails = exampleCurrencyComparisonDetails())
+}
+
+@Composable
+fun exampleCurrencyComparisonDetails(): CurrencyComparisonDetails {
+    return CurrencyComparisonDetails(
         code = "AAA",
         codein = "BBB",
         name = "",
@@ -335,7 +379,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "5",
                 ask = "",
-                timestamp = "1725839920"),
+                timestamp = "1725839920"
+            ),
             CurrencyHistoricalData(
                 high = "",
                 low = "",
@@ -343,7 +388,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "4.9",
                 ask = "",
-                timestamp = "1725839920"),
+                timestamp = "1725839920"
+            ),
             CurrencyHistoricalData(
                 high = "",
                 low = "",
@@ -351,7 +397,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "4",
                 ask = "",
-                timestamp = "1725839920"),
+                timestamp = "1725839920"
+            ),
             CurrencyHistoricalData(
                 high = "",
                 low = "",
@@ -359,7 +406,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "6",
                 ask = "",
-                timestamp = "1725839920"),
+                timestamp = "1725839920"
+            ),
             CurrencyHistoricalData(
                 high = "",
                 low = "",
@@ -367,8 +415,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "3",
                 ask = "",
-                timestamp = "1725839920"),
-
+                timestamp = "1725839920"
+            ),
             CurrencyHistoricalData(
                 high = "",
                 low = "",
@@ -376,7 +424,8 @@ fun PreviewBidChartComposable() {
                 pctChange = "",
                 bid = "2",
                 ask = "",
-                timestamp = "1725839920"),)
+                timestamp = "1725839920"
+            ),
+        )
     )
-    BidChartComposable(currencyComparisonDetails = exampleDetails)
 }

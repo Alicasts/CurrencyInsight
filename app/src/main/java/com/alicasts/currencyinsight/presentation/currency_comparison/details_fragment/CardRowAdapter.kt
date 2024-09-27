@@ -17,8 +17,8 @@ class CardRowAdapter(private val rows: List<Pair<String, String>>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val row = rows[position]
-        holder.binding.firstTextView.text = row.first
-        holder.binding.secondTextView.text = row.second
+        holder.binding.labelTextView.text = row.first
+        holder.binding.valueTextView.text = row.second
     }
 
     override fun getItemCount(): Int = rows.size

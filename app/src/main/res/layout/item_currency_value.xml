@@ -11,6 +11,7 @@
         android:id="@+id/currency_value_text_view"
         android:layout_width="wrap_content"
         android:maxWidth="160dp"
+        android:labelFor="@+id/currency_name_text_view"
         android:text="@string/default_target_currency_value"
         android:layout_height="wrap_content"
         android:autofillHints="Currency Value"

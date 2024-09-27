@@ -2,22 +2,44 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="batata">#3F030000</color>
-    <color name="batata22">#88882222</color>
+    <color name="red">#B00020</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="venice_blue">#056A8C</color>
+    <color name="persian_green">#00ADA3</color>
+    <color name="pickled_bluewood">#2F4858</color>
+    <color name="deep_cerulean">#008ca0</color>
+    <color name="emerald">#008ca0</color>
+    <color name="ziggurat">#B6D3E2</color>
+    <color name="porcelain">#ECEDEE</color>
+    <color name="silver">#C3C3C3</color>
+    <color name="abbey">#4D4F51</color>
+    <color name="mine_shaft">#3C3C3C</color>
+    <color name="firefly">#0C212C</color>
+    <color name="alto">#D1D0D0</color>
 
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryVariant">#3700B3</color>
-    <color name="colorOnPrimary">#FFFFFF</color>
 
-    <color name="colorSecondary">#03DAC6</color>
-    <color name="colorSecondaryVariant">#018786</color>
-    <color name="colorOnSecondary">#000000</color>
+    <color name="colorPrimary">@color/pickled_bluewood</color>
+    <color name="colorPrimaryVariant">@color/emerald</color>
+    <color name="colorOnPrimary">@color/white</color>
 
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnSurface">#000000</color>
+    <color name="colorSecondary">@color/deep_cerulean</color>
+    <color name="colorSecondaryVariant">@color/emerald</color>
+    <color name="colorOnSecondary">@color/black</color>
 
-    <color name="colorError">#B00020</color>
-    <color name="colorOnError">#FFFFFF</color>
+    <color name="colorBackground">@color/alto</color>
+    <color name="colorSurface">@color/silver</color>
+    <color name="colorOnSurface">@color/black</color>
+
+    <color name="colorError">@color/red</color>
+    <color name="colorOnError">@color/white</color>
+
+    <color name="primary_text_color">@color/abbey</color>
+    <color name="secondary_text_color">@color/mine_shaft</color>
+    <color name="tertiary_text_color">@color/mine_shaft</color>
+    <color name="button_text_color">@color/silver</color>
+
+    <color name="button_primary_background_color">@color/firefly</color>
+    <color name="input_fields_background_color">@color/porcelain</color>
+    <color name="input_fields_stroke_color">@color/pickled_bluewood</color>
 
 </resources>
