@@ -2,13 +2,11 @@ package com.alicasts.currencyinsight.presentation
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.alicasts.currencyinsight.R
-import com.alicasts.currencyinsight.presentation.currency_pair_list.CurrencyPairListActivity
 import com.alicasts.currencyinsight.databinding.ActivityMainBinding
+import com.alicasts.currencyinsight.presentation.currency_pair_list.CurrencyPairListActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
