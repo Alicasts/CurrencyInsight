@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.alicasts.currencyinsight"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.alicasts.currencyinsight"
@@ -59,7 +59,7 @@ android {
 }
 
 dependencies {
-    implementation (libs.androidx.room.runtime)
+    implementation(libs.androidx.room.runtime)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -88,7 +88,6 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
     kaptAndroidTest(libs.hilt.android.compiler)
-    annotationProcessor(libs.androidx.room.compiler)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
