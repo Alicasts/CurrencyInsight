@@ -1,20 +1,20 @@
 [versions]
-agp = "8.5.2"
+agp = "8.10.1"
 coreTesting = "2.2.0"
-fragmentKtx = "1.8.3"
+fragmentKtx = "1.8.8"
 hiltAndroidTesting = "2.40.5"
 kotlin = "1.9.0"
-coreKtx = "1.13.1"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-appcompat = "1.7.0"
+appcompat = "1.7.1"
 kotlinxCoroutinesTest = "1.7.3"
-lifecycleViewmodelKtx = "2.8.6"
+lifecycleViewmodelKtx = "2.9.1"
 material = "1.12.0"
-activity = "1.9.2"
-constraintlayout = "2.1.4"
-materialVersion = "1.7.2"
+activity = "1.10.1"
+constraintlayout = "2.2.1"
+materialVersion = "1.8.3"
 mockk = "1.13.7"
 mpandroidchart = "v3.1.0"
 okhttp = "5.0.0-alpha.2"
@@ -24,8 +24,7 @@ hiltAndroid = "2.49"
 hiltAndroidCompiler = "2.49"
 roomCompiler = "2.6.1"
 espressoContrib = "3.6.1"
-compose = "1.7.2"
-uiTooling = "1.7.2"
+compose = "1.8.3"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -61,7 +60,7 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltA
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 androidx-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espressoContrib" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
